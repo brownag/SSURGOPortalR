@@ -1,5 +1,5 @@
 #' @importFrom utils unzip
-.apply_crossplatform_patches <- function(pyz) {
+.apply_crossplatform_patches <- function(pyz, verbose) {
   # if not on Windows, this function is invoked
   # to apply patches to the downloaded .pyz file
   if (Sys.info()["sysname"] != "Windows") {
@@ -10,7 +10,6 @@
     if (!dir.exists(scd)) {
       dir.create(scd, showWarnings = FALSE, recursive = TRUE)
     }
-
 
     #### EXTRACT .PYZ contents ----
     utils::unzip(file.path(wd, "SSURGOPortal.pyz"), exdir = scd)
@@ -31,6 +30,15 @@
     }
     writeLines(x, mainpy)
 
+    #### PATCH dataloader.py ----
+    dlpy <- file.path(scd, "dlcore", "dataloader.py")
+    x <- readLines(dlpy, warn = FALSE)
+    # use lowercase areasymbol in dataloader .shp paths
+    x <- gsub("(\\+ +)(areasym|ssaName|ssa)( *\\+*)", "\\1\\2.lower()\\3", x)
+    x <- gsub("return  (None, None, None, None, None)",
+              "return  (None, None, None, None, None, None, None)",
+              x, fixed = TRUE)
+    writeLines(x, dlpy)
 
     #### REBUILD .PYZ file ----
     system(paste0(.find_python(), " -m zipapp ", shQuote(scd)), intern = TRUE)
@@ -39,13 +47,11 @@
       file.path(wd, "SSURGOPortal.pyz"),
       overwrite = TRUE
     )
-
-    if (all(unlink(scd, recursive = TRUE, force = TRUE))) {
+    unlink(scd, recursive = TRUE, force = TRUE)
+    if (verbose)
       message(
-        "SSURGO Portal cross-platform patches have been applied\n
-        NOTE: usage on Linux/macOS is experimental",
-        call. = FALSE
+        "SSURGO Portal cross-platform patches have been applied\nNOTE: usage on Linux/macOS is experimental"
       )
-    }
+    file.remove(file.path(wd, "SSURGO-Portal.pyz"))
   }
 }

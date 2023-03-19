@@ -31,16 +31,16 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
   }
 
   if (file.exists(dst) && !overwrite) {
-    stop("File ", dst, " already exists. Set overwrite=TRUE to proceed anyway.")
+    message("File ", dst, " already exists. Set overwrite=TRUE to re-download")
+    res <- TRUE
+  } else {
+    res <- try(download.file(urx, dst, quiet = !verbose, ...))
   }
-
-  res <- try(download.file(urx, dst, quiet = !verbose, ...))
-
 
   if (!inherits(res, 'try-error')) {
 
     # apply patches if needed
-    .apply_crossplatform_patches(res)
+    .apply_crossplatform_patches(res, verbose)
 
     if (verbose) {
       message("Downloaded SSURGO Portal to: ", dst)

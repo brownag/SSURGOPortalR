@@ -103,6 +103,22 @@ ssurgo_portal <- function(request,
                                   "importcandidates",
                                   "importspatialdata"))
 
+  req <- list(request = request, ...)
+
+  # normalize paths
+  if (!is.null(req$database)) {
+    req$database <- normalizePath(req$database)
+  }
+
+  if (!is.null(req$root)) {
+    req$root <- normalizePath(req$root)
+  }
+
+  # allow vector of subfolders rather than list
+  if (!is.null(req$subfolders) && !is.list(req$subfolders)) {
+    req$subfolders <- as.list(req$subfolders)
+  }
+
   py_path <- .find_python()
 
   # additional arguments (...) are passed in JSON w/ request type
@@ -110,7 +126,7 @@ ssurgo_portal <- function(request,
     args <- paste0("?", request)
     cmd <- paste0(shQuote(py_path), " ", shQuote(pyz_path), " ", args)
   } else {
-    args <- jsonlite::toJSON(list(request = request, ...), auto_unbox = TRUE)
+    args <- jsonlite::toJSON(req, auto_unbox = TRUE)
     winbase <- ifelse(Sys.info()["sysname"] == "Windows", "cmd /c ", "")
     cmd <- paste0(winbase, "echo ", shQuote(args), " | ", shQuote(py_path), " ", shQuote(pyz_path), " @")
   }
@@ -155,6 +171,14 @@ ssurgo_portal <- function(request,
     # parse out schema and instance json blocks
     i <- grep("in schema:$", e)
     j <- grep("^On instance:$", e)
+
+    # this happens for unhandled exceptions in the code
+    # as opposed to the schema of the JSON error messages
+    if (length(i) == 0 || length(j) == 0) {
+      return(list(message = x,
+                  schema = NULL,
+                  instance = NULL))
+    }
 
     # return as list
     list(

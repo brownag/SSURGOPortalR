@@ -75,6 +75,45 @@ ssurgo_portal("copytemplate",
               overwrite = TRUE)
 ```
 
+## Download and Import Data
+
+Using the {soilDB} package SSURGO data for input into template databases can easily be downloaded. For example here we specify a generic `WHERE` clause used against the `sacatalog` table in Soil Data Access. 
+
+```{r, eval = FALSE}
+td <- file.path(tempdir(), "ssurgo_test")
+
+download_ssurgo("areasymbol LIKE 'RI%'", exdir = td)
+```
+
+In this instance the wildcard only returns a single survey, `"RI600"`, but this pattern could be used in other areas to download multiple surveys within a state (without explicitly knowing their `areasymbol`).
+
+After downloading and extracting soil survey area data to a temporary directory, we can "pretest" them as candidates for import into the template.
+
+```{r, eval = FALSE}
+ssurgo_portal(
+  "pretestimportcandidates",
+  database = "sample_gpkg/test.gpkg",
+  root = td,
+  istabularonly = FALSE
+)
+```
+
+If everything looks good, we can go ahead with the import. For this we use the `"importcandidates"` request.
+
+```{r, eval = FALSE}
+ssurgo_portal(
+  "importcandidates",
+  database = "sample_gpkg/test.gpkg",
+  root = td,
+  istabularonly = FALSE,
+  skippretest = TRUE,
+  subfolders = c("RI600"),
+  loadinspatialorder = FALSE,
+  loadspatialdatawithinsubprocess = FALSE,
+  dissolvemupolygon = FALSE
+)
+```
+
 ## Cross-platform Support
 
 This package applies patches to attempt to make the .PYZ contents minimally compatible with Linux and macOS. This feature is experimental and intended to provide feedback for future development. The configuration routine that installs the bundled Windows .whl files will be triggered on non-Windows platforms (and should be expected to fail). 
