@@ -9,8 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%",
-  eval = Sys.info()["sysname"] == "Windows"
+  out.width = "100%"
 )
 ```
 
@@ -37,7 +36,7 @@ This is example shows how to install the .PYZ file to a standard location:
 library(SSURGOPortal)
 ```
 
-```{r install}
+```{r install, eval=FALSE}
 install_ssurgo_portal()
 ```
 
@@ -57,11 +56,29 @@ We can inspect the commands that are generated using `command_only=TRUE`
 
 For example, here is a sample `"copytemplate"` request to create a new GeoPackage database called `"test.gpkg"` from a template:
 
-```{r, eval = TRUE}
+```{r}
 ssurgo_portal("copytemplate", 
               templatename = "GeoPackage", 
-              folder = "test", 
-              filename = "test.gpkg", 
+              folder = "sample_gpkg", 
+              filename = "test", 
               overwrite = TRUE, 
               command_only = TRUE)
 ```
+
+Now after inspecting the command, we can actually run it:
+
+```{r}
+ssurgo_portal("copytemplate", 
+              templatename = "GeoPackage", 
+              folder = "sample_gpkg", 
+              filename = "test", 
+              overwrite = TRUE)
+```
+
+## Cross-platform Support
+
+This package applies patches to attempt to make the .PYZ contents minimally compatible with Linux and macOS. This feature is experimental and intended to provide feedback for future development. The configuration routine that installs the bundled Windows .whl files will be triggered on non-Windows platforms (and should be expected to fail). 
+
+To prepare your Python system or virtual environment on other platforms, run `python -m pip install bottle gdal` (or similar) to make sure that the required modules are already installed before invoking the SSURGO Portal tools.
+
+If you encounter other problems on non-Windows platforms, file an issue in the [issue tracker](https://github.com/brownag/SSSURGOPortalR/issues).

@@ -103,11 +103,7 @@ ssurgo_portal <- function(request,
                                   "importcandidates",
                                   "importspatialdata"))
 
-  # find python
-  py_path <- Sys.which("python")
-  if (nchar(py_path) == 0) {
-    py_path <- Sys.which("python3")
-  }
+  py_path <- .find_python()
 
   # additional arguments (...) are passed in JSON w/ request type
   if (schema) {
@@ -115,7 +111,8 @@ ssurgo_portal <- function(request,
     cmd <- paste0(shQuote(py_path), " ", shQuote(pyz_path), " ", args)
   } else {
     args <- jsonlite::toJSON(list(request = request, ...), auto_unbox = TRUE)
-    cmd <- paste0("cmd /c ", "echo ", args, " | ", shQuote(py_path), " ", shQuote(pyz_path), " @")
+    winbase <- ifelse(Sys.info()["sysname"] == "Windows", "cmd /c ", "")
+    cmd <- paste0(winbase, "echo ", shQuote(args), " | ", shQuote(py_path), " ", shQuote(pyz_path), " @")
   }
 
   # short-circuit
@@ -128,8 +125,7 @@ ssurgo_portal <- function(request,
     cmd,
     intern = TRUE,
     ignore.stdout = FALSE,
-    ignore.stderr = FALSE,
-    show.output.on.console = TRUE
+    ignore.stderr = FALSE
   )
 
   # for PYZ ? requests (schema=TRUE)
@@ -189,4 +185,13 @@ ssurgo_portal <- function(request,
     cat(res, sep = "\n")
     return(invisible(NULL))
   }
+}
+
+.find_python <- function() {
+  # find python
+  py_path <- Sys.which("python")
+  if (nchar(py_path) == 0) {
+    py_path <- Sys.which("python3")
+  }
+  py_path
 }

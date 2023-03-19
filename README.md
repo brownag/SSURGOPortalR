@@ -40,6 +40,14 @@ To verify everything is set up and working, we can send the
 
 ``` r
 ssurgo_portal("getstatus")
+#> $status
+#> [1] TRUE
+#> 
+#> $message
+#> [1] "It\"s alive! runmode=RunMode.DATA_LOADER, isPyz=True, __file__=/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz/dlcore/dlutilities.py, currentPath=/home/andrew/.local/share/R/SSURGOPortal"
+#> 
+#> $elapsedseconds
+#> [1] 0
 ```
 
 See the documentation for `ssurgo_portal()` (`?ssurgo_portal`) for other
@@ -57,9 +65,44 @@ GeoPackage database called `"test.gpkg"` from a template:
 ``` r
 ssurgo_portal("copytemplate", 
               templatename = "GeoPackage", 
-              folder = "test", 
-              filename = "test.gpkg", 
+              folder = "sample_gpkg", 
+              filename = "test", 
               overwrite = TRUE, 
               command_only = TRUE)
-#> [1] "cmd /c echo {\"request\":\"copytemplatefile\",\"templatename\":\"GeoPackage\",\"folder\":\"test\",\"filename\":\"test.gpkg\",\"overwrite\":true} | '/home/andrew/.virtualenvs/r-reticulate/bin/python' '/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz' @"
+#> [1] "echo '{\"request\":\"copytemplatefile\",\"templatename\":\"GeoPackage\",\"folder\":\"sample_gpkg\",\"filename\":\"test\",\"overwrite\":true}' | '/usr/bin/python' '/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz' @"
 ```
+
+Now after inspecting the command, we can actually run it:
+
+``` r
+ssurgo_portal("copytemplate", 
+              templatename = "GeoPackage", 
+              folder = "sample_gpkg", 
+              filename = "test", 
+              overwrite = TRUE)
+#> $status
+#> [1] TRUE
+#> 
+#> $message
+#> [1] "Copied templates/geopackage.gpkg to sample_gpkg/test.gpkg"
+#> 
+#> $elapsedseconds
+#> [1] 0
+```
+
+## Cross-platform Support
+
+This package applies patches to attempt to make the .PYZ contents
+minimally compatible with Linux and macOS. This feature is experimental
+and intended to provide feedback for future development. The
+configuration routine that installs the bundled Windows .whl files will
+be triggered on non-Windows platforms (and should be expected to fail).
+
+To prepare your Python system or virtual environment on other platforms,
+run `python -m pip install bottle gdal` (or similar) to make sure that
+the required modules are already installed before invoking the SSURGO
+Portal tools.
+
+If you encounter other problems on non-Windows platforms, file an issue
+in the [issue
+tracker](https://github.com/brownag/SSSURGOPortalR/issues).
