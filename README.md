@@ -145,7 +145,7 @@ configuration routine that installs the bundled Windows .whl files will
 be triggered on non-Windows platforms (and should be expected to fail).
 
 To prepare your Python system or virtual environment on other platforms,
-run `python -m pip install bottle gdal` (or similar) to make sure that
+run `python -m pip install bottle gdal jsonschema` (or equivalent) to make sure that
 the required modules are already installed before invoking the SSURGO
 Portal tools.
 
