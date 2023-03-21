@@ -84,11 +84,18 @@
 #'               areasymbols = list("WV603"))
 #' }
 #' @importFrom jsonlite fromJSON toJSON
-ssurgo_portal <- function(request,
+ssurgo_portal <- function(request = NULL,
                           pyz_path = file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz"),
                           ...,
                           schema = FALSE,
                           command_only = FALSE) {
+
+  # launch GUI
+  if (missing(request) || is.null(request)) {
+    system(paste0(shQuote(.find_python()), ' ', shQuote(
+      file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+    )))
+  }
 
   request <- match.arg(request, c("getstatus",
                                   "getusage",
