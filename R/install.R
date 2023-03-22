@@ -34,7 +34,7 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
     message("File ", dst, " already exists. Set overwrite=TRUE to re-download")
     res <- TRUE
   } else {
-    res <- try(download.file(urx, dst, quiet = !verbose, ...))
+    res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb", ...))
   }
 
   if (!inherits(res, 'try-error')) {
