@@ -17,8 +17,8 @@
 #' @importFrom utils download.file
 install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000, ...) {
 
-  # TODO: autoupdate link, use release, build pyz from GH source?
-  urx <- "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO%20Portal_03_08_2023.pyz"
+  # TODO: autoupdate link, use release, build pyz from GH source? expose "source" argument
+  urx <- "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz"
 
   optorig <- getOption("timeout")
   on.exit(options(timeout = optorig))
