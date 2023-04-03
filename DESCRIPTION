@@ -10,10 +10,12 @@ Imports:
   utils, 
   jsonlite
 Suggests:
-  soilDB,
-  terra
+    soilDB,
+    terra,
+    testthat (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 URL: http://humus.rocks/SSURGOPortalR/
+Config/testthat/edition: 3
