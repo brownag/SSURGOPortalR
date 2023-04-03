@@ -134,8 +134,14 @@ ssurgo_portal <- function(request = NULL,
     cmd <- paste0(shQuote(py_path), " ", shQuote(pyz_path), " ", args)
   } else {
     args <- jsonlite::toJSON(req, auto_unbox = TRUE)
-    winbase <- ifelse(Sys.info()["sysname"] == "Windows", "cmd /c ", "")
-    cmd <- paste0(winbase, "echo ", shQuote(args), " | ", shQuote(py_path), " ", shQuote(pyz_path), " @")
+
+    winbase <- ""
+    if (Sys.info()["sysname"] == "Windows") {
+      winbase <- "cmd /c "
+    } else {
+      args <- shQuote(args)
+    }
+    cmd <- paste0(winbase, "echo ", args, " | ", shQuote(py_path), " ", shQuote(pyz_path), " @")
   }
 
   # short-circuit
