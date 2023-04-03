@@ -1,5 +1,8 @@
 test_that("ssurgo_portal() works (template only, no SSURGO data)", {
 
+  # initiate ssurgo portal
+  # expect_equal(ssurgo_portal(), 0)
+
   # test helper functions
   .expect_status_isTRUE <- function(x) {
     expect_true(inherits(x, 'list') &&

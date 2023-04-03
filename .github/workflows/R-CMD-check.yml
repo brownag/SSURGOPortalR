@@ -38,26 +38,33 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       - uses: conda-incubator/setup-miniconda@v2
+        if: runner.os == 'Windows'
         with:
           miniconda-version: "latest"
           activate-environment: r-reticulate
 
-      - uses: r-lib/actions/setup-pandoc@v2
+      - name: Install system and Python dependencies (windows)
+        if: runner.os == 'Windows'
+        run: |
+          conda install -c conda-forge pip wheel numpy bottle jsonschema gdal
 
       - name: Install system dependencies (ubuntu)
-        if: runner.os == 'ubuntu'
+        if: runner.os != 'macOS' && runner.os != 'Windows'
         run: |
-          sudo apt install gdal-bin proj-bin libgdal-dev libproj-dev libgeos-dev
+          sudo add-apt-repository ppa:ubuntugis/ppa
+          sudo apt update
+          sudo apt install gdal-bin libgdal-dev
+          python -m pip install pip wheel numpy
+          python -m pip install bottle jsonschema gdal==3.4.1
 
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install gdal
+          python -m pip install pip wheel numpy
+          python -m pip install bottle jsonschema gdal
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install bottle jsonschema gdal
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -67,8 +74,12 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: any::rcmdcheck, local::.
           needs: check
+
+      - name: Install SSURGO-Portal
+        run: SSURGOPortal::install_ssurgo_portal()
+        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
         with:

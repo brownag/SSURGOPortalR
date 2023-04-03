@@ -92,8 +92,11 @@ ssurgo_portal <- function(request = NULL,
 
   # launch GUI
   if (missing(request) || is.null(request)) {
-    system(paste0(shQuote(.find_python()), ' ', shQuote(
-      file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+    return(invisible(.syscall(
+      paste0(shQuote(c(
+        .find_python(),
+        file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+      )), collapse = ' ')
     )))
   }
 
@@ -150,12 +153,7 @@ ssurgo_portal <- function(request = NULL,
   }
 
   # execute and capture output
-  res <- system(
-    cmd,
-    intern = TRUE,
-    ignore.stdout = FALSE,
-    ignore.stderr = FALSE
-  )
+  res <- .syscall(cmd)
 
   # for PYZ ? requests (schema=TRUE)
   i <- grep("^(Request|Response) schema for", res)
@@ -231,4 +229,14 @@ ssurgo_portal <- function(request = NULL,
     py_path <- Sys.which("python3")
   }
   py_path
+}
+
+
+.syscall <- function(cmd) {
+  system(cmd,
+         wait = FALSE,
+         intern = TRUE,
+         ignore.stdout = FALSE,
+         ignore.stderr = FALSE,
+         input = c("p", "\r"))
 }
