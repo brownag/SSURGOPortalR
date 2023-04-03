@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # SSURGOPortal
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of SSURGOPortal is to provide a simple R interface to the 'SSURGO Portal' Python tools. Providing an R wrapper around the SSURGO Portal API allows users to automate many of the operations they might normally achieve through the graphical user interface.
