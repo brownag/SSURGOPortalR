@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">SSURGOPortal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,9 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -54,7 +57,7 @@
 <div class="page-header"><h1 id="ssurgoportal">SSURGOPortal<a class="anchor" aria-label="anchor" href="#ssurgoportal"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>The goal of SSURGOPortal is to provide a simple R interface to the ‘SSURGO Portal’ Python tools. Providing an R wrapper around the SSURGO Portal API allows users to automate many of the operations they might normally achieve through the graphical user interface.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -79,7 +82,7 @@
 <span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $message</span></span>
-<span><span class="co">#&gt; [1] "It\"s alive! runmode=RunMode.DATA_LOADER, isPyz=True, __file__=/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz/dlcore/dlutilities.py, currentPath=/home/andrew/.local/share/R/SSURGOPortal"</span></span>
+<span><span class="co">#&gt; [1] "It\"s alive! runmode=RunMode.DATA_LOADER, isPyz=True, __file__=C:\\Users\\Andrew.G.Brown\\AppData\\Roaming\\R\\data\\R\\SSURGOPortal\\SSURGOPortal.pyz\\dlcore\\dlutilities.py, currentPath=C:\\Users\\Andrew.G.Brown\\AppData\\Roaming\\R\\data\\R\\SSURGOPortal"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $elapsedseconds</span></span>
 <span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
@@ -94,7 +97,7 @@
 <span>              filename <span class="op">=</span> <span class="st">"test"</span>, </span>
 <span>              overwrite <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>              command_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "echo '{\"request\":\"copytemplatefile\",\"templatename\":\"GeoPackage\",\"folder\":\"sample_gpkg\",\"filename\":\"test\",\"overwrite\":true}' | '/usr/bin/python' '/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz' @"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "cmd /c echo {\"request\":\"copytemplatefile\",\"templatename\":\"GeoPackage\",\"folder\":\"sample_gpkg\",\"filename\":\"test\",\"overwrite\":true} | \"C:\\PROGRA~1\\PYTHON~1\\python.exe\" \"C:\\Users\\Andrew.G.Brown\\AppData\\Roaming/R/data/R/SSURGOPortal/SSURGOPortal.pyz\" @"</span></span></code></pre></div>
 <p>Now after inspecting the command, we can actually run it:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/ssurgo_portal.html">ssurgo_portal</a></span><span class="op">(</span><span class="st">"copytemplate"</span>, </span>
@@ -106,7 +109,7 @@
 <span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $message</span></span>
-<span><span class="co">#&gt; [1] "Copied templates/geopackage.gpkg to sample_gpkg/test.gpkg"</span></span>
+<span><span class="co">#&gt; [1] "Copied templates/geopackage.gpkg to sample_gpkg\\test.gpkg"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $elapsedseconds</span></span>
 <span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
@@ -143,10 +146,20 @@
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="python-versions-supported">Python Versions Supported<a class="anchor" aria-label="anchor" href="#python-versions-supported"></a>
+</h2>
+<p>There are built in routines and binaries for running the tool on Windows with Python 3.9 or 3.10. If using a different version of Python you will need to be sure the required modules are installed prior to running <code><a href="reference/ssurgo_portal.html">ssurgo_portal()</a></code>.</p>
+</div>
+<div class="section level2">
+<h2 id="python-dependencies">Python Dependencies<a class="anchor" aria-label="anchor" href="#python-dependencies"></a>
+</h2>
+<p>To prepare your Python system or virtual environment, run <code>python -m pip install bottle gdal jsonschema</code> (or similar) to make sure that the required modules are already installed before invoking the SSURGO Portal tools.</p>
+</div>
+<div class="section level2">
 <h2 id="cross-platform-support">Cross-platform Support<a class="anchor" aria-label="anchor" href="#cross-platform-support"></a>
 </h2>
-<p>This package applies patches to attempt to make the .PYZ contents minimally compatible with Linux and macOS. This feature is experimental and intended to provide feedback for future development. The configuration routine that installs the bundled Windows .whl files will be triggered on non-Windows platforms (and should be expected to fail).</p>
-<p>To prepare your Python system or virtual environment on other platforms, run <code>python -m pip install bottle gdal jsonschema</code> (or equivalent) to make sure that the required modules are already installed before invoking the SSURGO Portal tools.</p>
+<p>This package applies patches to attempt to make the .PYZ contents minimally compatible with Linux and macOS. This feature is experimental and intended to provide feedback for future development. If these patches are not included the initialization routine will be triggered on non-Windows platforms.</p>
+<p>This routine only installs the bundled Windows wheel (.whl) files; it should be expected to fail on all other platforms and Python versions other than 3.9 and 3.10.</p>
 <p>If you encounter other problems on non-Windows platforms, file an issue in the <a href="https://github.com/brownag/SSSURGOPortalR/issues" class="external-link">issue tracker</a>.</p>
 </div>
 </div>
@@ -173,7 +186,12 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yml" class="external-link"><img src="https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
