@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # SSURGOPortal
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yml)
 <!-- badges: end -->
 
 The goal of SSURGOPortal is to provide a simple R interface to the 'SSURGO Portal' Python tools. Providing an R wrapper around the SSURGO Portal API allows users to automate many of the operations they might normally achieve through the graphical user interface.
@@ -115,10 +115,18 @@ ssurgo_portal(
 )
 ```
 
+## Python Versions Supported
+
+There are built in routines and binaries for running the tool on Windows with Python 3.9 or 3.10. If using a different version of Python you will need to be sure the required modules are installed prior to running `ssurgo_portal()`.
+
+## Python Dependencies
+
+To prepare your Python system or virtual environment, run `python -m pip install bottle gdal jsonschema` (or similar) to make sure that the required modules are already installed before invoking the SSURGO Portal tools.
+
 ## Cross-platform Support
 
-This package applies patches to attempt to make the .PYZ contents minimally compatible with Linux and macOS. This feature is experimental and intended to provide feedback for future development. The configuration routine that installs the bundled Windows .whl files will be triggered on non-Windows platforms (and should be expected to fail). 
+This package applies patches to attempt to make the .PYZ contents minimally compatible with Linux and macOS. This feature is experimental and intended to provide feedback for future development. If these patches are not included the initialization routine will be triggered on non-Windows platforms. 
 
-To prepare your Python system or virtual environment on other platforms, run `python -m pip install bottle gdal` (or similar) to make sure that the required modules are already installed before invoking the SSURGO Portal tools.
+This routine  only installs the bundled Windows wheel (.whl) files; it should be expected to fail on all other platforms and Python versions other than 3.9 and 3.10. 
 
 If you encounter other problems on non-Windows platforms, file an issue in the [issue tracker](https://github.com/brownag/SSSURGOPortalR/issues).

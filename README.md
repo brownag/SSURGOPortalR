@@ -4,6 +4,8 @@
 # SSURGOPortal
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/brownag/SSURGOPortalR/actions/workflows/R-CMD-check.yml)
 <!-- badges: end -->
 
 The goal of SSURGOPortal is to provide a simple R interface to the
@@ -44,7 +46,7 @@ ssurgo_portal("getstatus")
 #> [1] TRUE
 #> 
 #> $message
-#> [1] "It\"s alive! runmode=RunMode.DATA_LOADER, isPyz=True, __file__=/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz/dlcore/dlutilities.py, currentPath=/home/andrew/.local/share/R/SSURGOPortal"
+#> [1] "It\"s alive! runmode=RunMode.DATA_LOADER, isPyz=True, __file__=C:\\Users\\Andrew.G.Brown\\AppData\\Roaming\\R\\data\\R\\SSURGOPortal\\SSURGOPortal.pyz\\dlcore\\dlutilities.py, currentPath=C:\\Users\\Andrew.G.Brown\\AppData\\Roaming\\R\\data\\R\\SSURGOPortal"
 #> 
 #> $elapsedseconds
 #> [1] 0
@@ -69,7 +71,7 @@ ssurgo_portal("copytemplate",
               filename = "test", 
               overwrite = TRUE, 
               command_only = TRUE)
-#> [1] "echo '{\"request\":\"copytemplatefile\",\"templatename\":\"GeoPackage\",\"folder\":\"sample_gpkg\",\"filename\":\"test\",\"overwrite\":true}' | '/usr/bin/python' '/home/andrew/.local/share/R/SSURGOPortal/SSURGOPortal.pyz' @"
+#> [1] "cmd /c echo {\"request\":\"copytemplatefile\",\"templatename\":\"GeoPackage\",\"folder\":\"sample_gpkg\",\"filename\":\"test\",\"overwrite\":true} | \"C:\\PROGRA~1\\PYTHON~1\\python.exe\" \"C:\\Users\\Andrew.G.Brown\\AppData\\Roaming/R/data/R/SSURGOPortal/SSURGOPortal.pyz\" @"
 ```
 
 Now after inspecting the command, we can actually run it:
@@ -84,7 +86,7 @@ ssurgo_portal("copytemplate",
 #> [1] TRUE
 #> 
 #> $message
-#> [1] "Copied templates/geopackage.gpkg to sample_gpkg/test.gpkg"
+#> [1] "Copied templates/geopackage.gpkg to sample_gpkg\\test.gpkg"
 #> 
 #> $elapsedseconds
 #> [1] 0
@@ -136,18 +138,31 @@ ssurgo_portal(
 )
 ```
 
+## Python Versions Supported
+
+There are built in routines and binaries for running the tool on Windows
+with Python 3.9 or 3.10. If using a different version of Python you will
+need to be sure the required modules are installed prior to running
+`ssurgo_portal()`.
+
+## Python Dependencies
+
+To prepare your Python system or virtual environment, run
+`python -m pip install bottle gdal jsonschema` (or similar) to make sure
+that the required modules are already installed before invoking the
+SSURGO Portal tools.
+
 ## Cross-platform Support
 
 This package applies patches to attempt to make the .PYZ contents
 minimally compatible with Linux and macOS. This feature is experimental
-and intended to provide feedback for future development. The
-configuration routine that installs the bundled Windows .whl files will
-be triggered on non-Windows platforms (and should be expected to fail).
+and intended to provide feedback for future development. If these
+patches are not included the initialization routine will be triggered on
+non-Windows platforms.
 
-To prepare your Python system or virtual environment on other platforms,
-run `python -m pip install bottle gdal jsonschema` (or equivalent) to make sure that
-the required modules are already installed before invoking the SSURGO
-Portal tools.
+This routine only installs the bundled Windows wheel (.whl) files; it
+should be expected to fail on all other platforms and Python versions
+other than 3.9 and 3.10.
 
 If you encounter other problems on non-Windows platforms, file an issue
 in the [issue
