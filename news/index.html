@@ -27,7 +27,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/brownag/SSURGOPortalR/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -35,12 +41,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Changelog</h1>
-      
+      <small>Source: <a href="https://github.com/brownag/SSURGOPortalR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="ssurgoportal-002">SSURGOPortal 0.0.2<a class="anchor" aria-label="anchor" href="#ssurgoportal-002"></a></h2>
-<ul><li>
+<ul><li><p><code><a href="../reference/install_ssurgo_portal.html">install_ssurgo_portal()</a></code> gains <code>src</code> argument to specify URL source of .PYZ for install</p></li>
+<li>
 <p>.PYZ files are now automatically patched to remove Python version limit</p>
 <ul><li><p>On Python versions other than 3.9 and 3.10 the user is responsible for installing the necessary dependencies: <code>gdal</code>, <code>bottle</code>, and <code>jsonschema</code>. I.e. <code>python -m pip install gdal bottle jsonschema</code></p></li>
 <li><p>Note that some pre-compiled wheel files are available for Windows (<a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/" class="external-link uri">https://www.lfd.uci.edu/~gohlke/pythonlibs/</a>) which can help if you encounter issues building <code>gdal</code>.</p></li>
@@ -49,7 +56,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="ssurgoportal-001">SSURGOPortal 0.0.1<a class="anchor" aria-label="anchor" href="#ssurgoportal-001"></a></h2>
 <ul><li><p>Initial R package paired with alpha release of “SSURGO Portal”</p></li>
-<li><p>Added experimental patches for use of SSURGO Portal on macOS and Linux.</p></li>
+<li><p>Added experimental patches for use of “SSURGO Portal” on macOS and Linux.</p></li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
