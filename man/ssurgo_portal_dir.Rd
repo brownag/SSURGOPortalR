@@ -7,10 +7,10 @@
 ssurgo_portal_dir(which = "data")
 }
 \arguments{
-\item{which}{One or more of: `"data"`, `"config"`, `"cache"`}
+\item{which}{One or more of: \code{"data"}, \code{"config"}, \code{"cache"}}
 }
 \value{
-`character`. Path to data, config or cache directories, respectively.
+\code{character}. Path to data, config or cache directories, respectively.
 }
 \description{
 These are standard locations for storing data, config, and cache information for SSURGO Portal outside of the installation in the R package library.

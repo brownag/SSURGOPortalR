@@ -5,7 +5,7 @@
 \title{Generate Requests for 'SSURGO Portal' Data Loader}
 \usage{
 ssurgo_portal(
-  request,
+  request = NULL,
   pyz_path = file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz"),
   ...,
   schema = FALSE,
@@ -15,35 +15,36 @@ ssurgo_portal(
 \arguments{
 \item{request}{One of the available request types, see Details.}
 
-\item{pyz_path}{Path to "SSURGO Portal" .pyz file. Default `"SSURGOPortal.pyz"` in `ssurgo_portal_dir("data")` directory.}
+\item{pyz_path}{Path to "SSURGO Portal" .pyz file. Default \code{"SSURGOPortal.pyz"} in \code{ssurgo_portal_dir("data")} directory.}
 
-\item{...}{Additional parameters for `request`}
+\item{...}{Additional parameters for \code{request}}
 
-\item{schema}{Return request and response schemas? Default: `FALSE`}
+\item{schema}{Return request and response schemas? Default: \code{FALSE}}
 
-\item{command_only}{Return command string rather than executing it? Default: `FALSE`}
+\item{command_only}{Return command string rather than executing it? Default: \code{FALSE}}
 }
 \value{
-A `list` object corresponding to the JSON response. `NULL` (invisibly) on error along with any other standard output from the tool printed to the console.
+A \code{list} object corresponding to the JSON response. \code{NULL} (invisibly) on error along with any other standard output from the tool printed to the console.
 }
 \description{
 Generate commands for the 'SSURGO Portal' Data Loader command-line interface, and parse resulting JSON output.
 }
 \details{
-|Request Name            |Description                                                                                                                                                            |
-|:-----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|getstatus               |Quick check for application responsiveness                                                                                                                             |
-|getusage                |Return usage information in payload.                                                                                                                                   |
-|getwindowsdriveletters  |Return all drive letters (only valid for Microsoft Windows)                                                                                                            |
-|getfoldertree           |Returns a file system tree.                                                                                                                                            |
-|gettemplatecatalog      |Returns JSON containing information about all available empty SSURGO SQLite templates.                                                                                 |
-|copytemplatefile        |Copies a template file to a specified folder path and name.                                                                                                            |
-|opentemplate            |Opens a SQLite file to confirm that it meets certain minimal criteria.                                                                                                 |
-|getdatabaseinventory    |List survey areas and related data within a SQLite database.                                                                                                           |
-|deleteareasymbols       |Delete the specified areasymbols from the database.                                                                                                                    |
-|pretestimportcandidates |Perform a 'pre-test' on subfolders under a root folder.                                                                                                                |
-|importcandidates        |Import SSURGO data from subfolders under a root folder. The import terminates if any folder fails.                                                                     |
-|importspatialdata       |For internal use only. Import SSURGO spatial data from shapefiles under a specified path. Note that this activity is isolated to support its use in a child process. |
+\tabular{ll}{
+   Request Name \tab Description \cr
+   getstatus \tab Quick check for application responsiveness \cr
+   getusage \tab Return usage information in payload. \cr
+   getwindowsdriveletters \tab Return all drive letters (only valid for Microsoft Windows) \cr
+   getfoldertree \tab Returns a file system tree. \cr
+   gettemplatecatalog \tab Returns JSON containing information about all available empty SSURGO SQLite templates. \cr
+   copytemplatefile \tab Copies a template file to a specified folder path and name. \cr
+   opentemplate \tab Opens a SQLite file to confirm that it meets certain minimal criteria. \cr
+   getdatabaseinventory \tab List survey areas and related data within a SQLite database. \cr
+   deleteareasymbols \tab Delete the specified areasymbols from the database. \cr
+   pretestimportcandidates \tab Perform a 'pre-test' on subfolders under a root folder. \cr
+   importcandidates \tab Import SSURGO data from subfolders under a root folder. The import terminates if any folder fails. \cr
+   importspatialdata \tab For internal use only. Import SSURGO spatial data from shapefiles under a specified path. Note that this activity is isolated to support its use in a child process. \cr
+}
 }
 \examples{
 \dontrun{

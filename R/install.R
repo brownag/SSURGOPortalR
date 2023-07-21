@@ -3,8 +3,9 @@
 #' This routine downloads the latest .pyz file from: \url{https://github.com/ncss-tech/SSURGO-Portal/}
 #'
 #' @param verbose Show download progress and location of file on successful download? Default `TRUE`
-#' @param overwrite Overwrite existing PYZ file? Default: `FALSE`
+#' @param overwrite Overwrite existing .PYZ file? Default: `FALSE`
 #' @param timeout Default: `3000` seconds. Temporarily overrides `options()` for `timeout`.
+#' @param src Default: `"https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz"`
 #' @param ... Additional arguments to `download.file()`
 #'
 #' @return Path to downloaded file, or `try-error` on error.
@@ -15,10 +16,12 @@
 #'  install_ssurgo_portal()
 #' }
 #' @importFrom utils download.file
-install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000, ...) {
+install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000,
+                                  src = "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz",
+                                  ...) {
 
-  # TODO: autoupdate link, use release, build pyz from GH source? expose "source" argument
-  urx <- "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz"
+  # TODO: autoupdate link, use release, build .PYZ from a GH source?
+  urx <- source
 
   optorig <- getOption("timeout")
   on.exit(options(timeout = optorig))

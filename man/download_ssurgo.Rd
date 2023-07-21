@@ -17,34 +17,34 @@ download_ssurgo(
 )
 }
 \arguments{
-\item{WHERE}{A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining the target extent.}
+\item{WHERE}{A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog} table. Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for defining the target extent.}
 
-\item{areasymbols}{Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used in lieu of `WHERE` argument.}
+\item{areasymbols}{Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} argument.}
 
-\item{destdir}{Directory to download ZIP files into. Default `tempdir()`.}
+\item{destdir}{Directory to download ZIP files into. Default \code{tempdir()}.}
 
-\item{exdir}{Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`}
+\item{exdir}{Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this directory. Default: \code{destdir}}
 
-\item{include_template}{Include the (possibly state-specific) MS Access template database? Default: `FALSE`}
+\item{include_template}{Include the (possibly state-specific) MS Access template database? Default: \code{FALSE}}
 
-\item{extract}{Logical. Extract ZIP files to `exdir`? Default: `TRUE`}
+\item{extract}{Logical. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
 
-\item{remove_zip}{Logical. Remove ZIP files after extracting? Default: `FALSE`}
+\item{remove_zip}{Logical. Remove ZIP files after extracting? Default: \code{FALSE}}
 
-\item{overwrite}{Logical. Overwrite by re-extracting if directory already exists? Default: `FALSE`}
+\item{overwrite}{Logical. Overwrite by re-extracting if directory already exists? Default: \code{FALSE}}
 
-\item{quiet}{Logical. Passed to `curl::curl_download()`.}
+\item{quiet}{Logical. Passed to \code{curl::curl_download()}.}
 }
 \value{
-Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip=TRUE`.
+Character. Paths to downloaded ZIP files (invisibly). May not exist if \code{remove_zip=TRUE}.
 }
 \description{
-Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with `include_template=TRUE`.
+Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with \code{include_template=TRUE}.
 }
 \details{
-To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
+To specify the Soil Survey Areas you would like to obtain data you use a \code{WHERE} clause for query of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"} or  \verb{areasymbol LIKE 'CT\%'}.
 
-Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
+Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the \emph{Soil Data Access Tables and Columns Report}: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a \code{try-error} if the \code{WHERE}/\code{areasymbols} arguments result in
 
-Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
+Several ESRI shapefiles are found in the \emph{/spatial/} folder extracted from a SSURGO ZIP. These have prefix \code{soilmu_} (mapunit), \code{soilsa_} (survey area), \code{soilsf_} (special features). There will also be a TXT file with prefix \code{soilsf_} describing any special features. Shapefile names then have an \code{a_} (polygon), \code{l_} (line), \code{p_} (point) followed by the soil survey area symbol.
 }

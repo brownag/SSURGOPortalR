@@ -4,19 +4,27 @@
 \alias{install_ssurgo_portal}
 \title{Download SSURGO Portal .PYZ file from GitHub}
 \usage{
-install_ssurgo_portal(verbose = TRUE, overwrite = FALSE, timeout = 3000, ...)
+install_ssurgo_portal(
+  verbose = TRUE,
+  overwrite = FALSE,
+  timeout = 3000,
+  src = "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz",
+  ...
+)
 }
 \arguments{
-\item{verbose}{Show download progress and location of file on successful download? Default `TRUE`}
+\item{verbose}{Show download progress and location of file on successful download? Default \code{TRUE}}
 
-\item{overwrite}{Overwrite existing PYZ file? Default: `FALSE`}
+\item{overwrite}{Overwrite existing .PYZ file? Default: \code{FALSE}}
 
-\item{timeout}{Default: `3000` seconds. Temporarily overrides `options()` for `timeout`.}
+\item{timeout}{Default: \code{3000} seconds. Temporarily overrides \code{options()} for \code{timeout}.}
 
-\item{...}{Additional arguments to `download.file()`}
+\item{src}{Default: \code{"https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz"}}
+
+\item{...}{Additional arguments to \code{download.file()}}
 }
 \value{
-Path to downloaded file, or `try-error` on error.
+Path to downloaded file, or \code{try-error} on error.
 }
 \description{
 This routine downloads the latest .pyz file from: \url{https://github.com/ncss-tech/SSURGO-Portal/}
