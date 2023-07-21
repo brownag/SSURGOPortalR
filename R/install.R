@@ -21,7 +21,7 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
                                   ...) {
 
   # TODO: autoupdate link, use release, build .PYZ from a GH source?
-  urx <- source
+  urx <- src
 
   optorig <- getOption("timeout")
   on.exit(options(timeout = optorig))
