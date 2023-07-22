@@ -19,11 +19,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,    r: 'release'}
-          - {os: windows-latest,  r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: '4.0'}
+          - {os: macos-latest,    r: 'release', python: '3.11'}
+          - {os: windows-latest,  r: 'release', python: '3.11'}
+          - {os: ubuntu-latest,   r: 'devel', python: '3.12-dev'}
+          - {os: ubuntu-latest,   r: 'release', python: '3.11'}
+          - {os: ubuntu-latest,   r: '4.0', python: '3.10'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -34,8 +34,8 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+          python-version: ${{ matrix.config.python }} 
+          architecture: 'x64' 
 
       - uses: conda-incubator/setup-miniconda@v2
         if: runner.os == 'Windows'
@@ -48,21 +48,23 @@ jobs:
         run: |
           conda install -c conda-forge pip wheel numpy bottle jsonschema gdal
 
-      - name: Install system dependencies (ubuntu)
+      - name: Install system and Python dependencies (ubuntu)
         if: runner.os != 'macOS' && runner.os != 'Windows'
         run: |
           sudo add-apt-repository ppa:ubuntugis/ppa
           sudo apt update
-          python -m pip install -U pip wheel numpy
+          python -m pip install --upgrade pip
+          python -m pip install -U wheel numpy
           sudo apt install gdal-bin libgdal-dev
-          python -m pip install bottle jsonschema gdal==3.4.1
+          python -m pip install bottle jsonschema gdal==3.4.3
 
-      - name: Install system dependencies (macOS)
+      - name: Install system and Python dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          python -m pip install -U pip wheel numpy
+          python -m pip install --upgrade pip
+          python -m pip install -U wheel numpy
           brew install gdal
-          python -m pip install bottle jsonschema gdal==3.6.2
+          python -m pip install bottle jsonschema gdal==3.6.4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
