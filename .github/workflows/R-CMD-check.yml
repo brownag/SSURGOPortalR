@@ -54,15 +54,15 @@ jobs:
           sudo add-apt-repository ppa:ubuntugis/ppa
           sudo apt update
           sudo apt install gdal-bin libgdal-dev
-          python -m pip install pip wheel numpy
+          python -m pip install -U pip wheel numpy
           python -m pip install bottle jsonschema gdal==3.4.1
 
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install gdal
-          python -m pip install pip wheel numpy
-          python -m pip install bottle jsonschema gdal
+          python -m pip install -U pip wheel numpy
+          python -m pip install bottle jsonschema gdal==3.4.1
 
       - uses: r-lib/actions/setup-pandoc@v2
 
