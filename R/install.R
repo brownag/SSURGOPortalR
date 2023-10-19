@@ -5,7 +5,7 @@
 #' @param verbose Show download progress and location of file on successful download? Default `TRUE`
 #' @param overwrite Overwrite existing .PYZ file? Default: `FALSE`
 #' @param timeout Default: `3000` seconds. Temporarily overrides `options()` for `timeout`.
-#' @param src Default: `"https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz"`
+#' @param src Default: `"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"`
 #' @param ... Additional arguments to `download.file()`
 #'
 #' @return Path to downloaded file, or `try-error` on error.
@@ -17,9 +17,10 @@
 #' }
 #' @importFrom utils download.file
 install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000,
-                                  src = "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz",
+                                  src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
                                   ...) {
 
+  # update 2023/10/19: use WSS link
   # TODO: autoupdate link, use release, build .PYZ from a GH source?
   urx <- src
 
@@ -27,28 +28,32 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
   on.exit(options(timeout = optorig))
   options(timeout = 3000)
   dstd <- ssurgo_portal_dir("data")
-  dst <- file.path(dstd, "SSURGOPortal.pyz")
+  dst <- file.path(dstd, "SSURGOPortal.pyz.zip")
+  dst2 <- file.path(dstd, "SSURGOPortal.pyz")
 
   if (!dir.exists(dstd)) {
     dir.create(dstd, recursive = TRUE)
   }
 
-  if (file.exists(dst) && !overwrite) {
-    message("File ", dst, " already exists. Set overwrite=TRUE to re-download")
+  if (file.exists(dst2) && !overwrite) {
+    message("File ", dst2, " already exists. Set overwrite=TRUE to re-download")
     res <- TRUE
   } else {
     res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb", ...))
+    res <- try(suppressWarnings(unzip(dst, exdir = dstd)))
+    res <- try(file.copy(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal.*pyz$")[1], dst2))
+    res <- try(file.remove(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal")[1]))
   }
 
   if (!inherits(res, 'try-error')) {
 
     # apply patches if needed
-    .apply_pyz_patches(res, verbose)
+    # .apply_pyz_patches(res, verbose)
 
     if (verbose) {
-      message("Downloaded SSURGO Portal to: ", dst)
+      message("Downloaded SSURGO Portal to: ", dst2)
     }
-    return(invisible(dst))
+    return(invisible(dst2))
   }
 
   message(res[0])

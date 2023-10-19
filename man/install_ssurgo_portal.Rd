@@ -8,7 +8,8 @@ install_ssurgo_portal(
   verbose = TRUE,
   overwrite = FALSE,
   timeout = 3000,
-  src = "https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz",
+  src =
+    "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
   ...
 )
 }
@@ -19,7 +20,7 @@ install_ssurgo_portal(
 
 \item{timeout}{Default: \code{3000} seconds. Temporarily overrides \code{options()} for \code{timeout}.}
 
-\item{src}{Default: \code{"https://github.com/ncss-tech/SSURGO-Portal/raw/main/SSURGO-Portal.pyz"}}
+\item{src}{Default: \code{"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"}}
 
 \item{...}{Additional arguments to \code{download.file()}}
 }

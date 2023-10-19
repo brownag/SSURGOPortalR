@@ -1,3 +1,7 @@
+# SSURGOPortal 0.0.3
+
+* `install_ssurgo_portal()`: Updated to Web Soil Survey as source URL for beta version of SSURGO Portal .PYZ file  <https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip>
+
 # SSURGOPortal 0.0.2
 
 * `install_ssurgo_portal()` gains `src` argument to specify URL source of .PYZ for install

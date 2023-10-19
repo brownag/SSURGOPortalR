@@ -92,12 +92,17 @@ ssurgo_portal <- function(request = NULL,
 
   # launch GUI
   if (missing(request) || is.null(request)) {
-    return(invisible(.syscall(
-      paste0(shQuote(c(
-        .find_python(),
-        file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
-      )), collapse = ' ')
-    )))
+
+    cmd <- paste0(shQuote(c(
+      .find_python(),
+      file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+    )), collapse = ' ')
+
+    if (command_only) {
+      return(cmd)
+    }
+
+    return(invisible(.syscall(cmd)))
   }
 
   request <- match.arg(request, c("getstatus",
