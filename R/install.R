@@ -41,7 +41,7 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
   } else {
     res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb", ...))
     res <- try(suppressWarnings(unzip(dst, exdir = dstd)))
-    res <- try(file.copy(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal.*pyz$")[1], dst2))
+    res <- try(file.copy(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal.*pyz$")[1], dst2, overwrite = TRUE))
     res <- try(file.remove(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal")[1]))
   }
 
