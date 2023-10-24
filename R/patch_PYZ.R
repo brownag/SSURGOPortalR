@@ -16,6 +16,9 @@
   x <- readLines(inpy, warn = FALSE)
 
   ## new patches for beta version (v0.1.0.31)
+  # fix for required user input
+  x <- gsub("# Let user know they've a choice.", "return True", x, fixed = TRUE)
+  x <- gsub("response = input('Press the \"Enter\" key to finish the initialization: ')", "", x, fixed = TRUE)
 
   # fix for UnboundLocalError: cannot access local variable 'message' where it is not associated with a value
   x <- gsub("# Install GDAL wheel if needed", "message = ''", x, fixed = TRUE)
