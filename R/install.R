@@ -48,7 +48,7 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
   if (!inherits(res, 'try-error')) {
 
     # apply patches if needed
-    # .apply_pyz_patches(res, verbose)
+    .apply_pyz_patches(res, verbose)
 
     if (verbose) {
       message("Downloaded SSURGO Portal to: ", dst2)
