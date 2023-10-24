@@ -21,7 +21,7 @@ jobs:
         config:
           - {os: macos-latest,    r: 'release', python: '3.11'}
           - {os: windows-latest,  r: 'release', python: '3.11'}
-          - {os: ubuntu-latest,   r: 'devel', python: '3.11'} # '3.12-dev'} # TODO: after numpy 1.26 release
+          - {os: ubuntu-latest,   r: 'devel', python: '3.12'}
           - {os: ubuntu-latest,   r: 'release', python: '3.11'}
           - {os: ubuntu-latest,   r: '4.0', python: '3.10'}
 
