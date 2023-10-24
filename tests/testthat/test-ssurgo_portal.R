@@ -22,6 +22,9 @@ test_that("ssurgo_portal() works (template only, no SSURGO data)", {
                  is.list(x$nodes))
   }
 
+  # trigger an initialization outside of test expectation (if needed)
+  try(ssurgo_portal("getstatus"))
+
   # check if its alive
   .expect_status_isTRUE(ssurgo_portal("getstatus"))
   .expect_response(ssurgo_portal("getstatus", schema = TRUE))
