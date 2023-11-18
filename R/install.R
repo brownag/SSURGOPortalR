@@ -1,6 +1,6 @@
-#' Download SSURGO Portal .PYZ file from GitHub
+#' Download SSURGO Portal .PYZ file from Web Soil Survey
 #'
-#' This routine downloads the latest .pyz file from: \url{https://github.com/ncss-tech/SSURGO-Portal/}
+#' This routine downloads the latest .pyz file from Web Soil Survey
 #'
 #' @param verbose Show download progress and location of file on successful download? Default `TRUE`
 #' @param overwrite Overwrite existing .PYZ file? Default: `FALSE`

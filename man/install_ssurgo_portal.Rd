@@ -2,7 +2,7 @@
 % Please edit documentation in R/install.R
 \name{install_ssurgo_portal}
 \alias{install_ssurgo_portal}
-\title{Download SSURGO Portal .PYZ file from GitHub}
+\title{Download SSURGO Portal .PYZ file from Web Soil Survey}
 \usage{
 install_ssurgo_portal(
   verbose = TRUE,
@@ -28,7 +28,7 @@ install_ssurgo_portal(
 Path to downloaded file, or \code{try-error} on error.
 }
 \description{
-This routine downloads the latest .pyz file from: \url{https://github.com/ncss-tech/SSURGO-Portal/}
+This routine downloads the latest .pyz file from Web Soil Survey
 }
 \examples{
 \dontrun{

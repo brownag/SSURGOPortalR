@@ -1,7 +1,7 @@
 Package: SSURGOPortal
 Type: Package
 Title: Download and Interact with the 'SSURGO Portal' Tools for Building and Editing U.S. Soil Survey Databases
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(person(given="Andrew", family="Brown", role=c("aut","cre"), email="andrew.g.brown@usda.gov"))
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: Provides methods for downloading and interacting with the 'SSURGO Portal' Python tools. 
