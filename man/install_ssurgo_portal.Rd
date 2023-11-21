@@ -10,6 +10,7 @@ install_ssurgo_portal(
   timeout = 3000,
   src =
     "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
+  venv = TRUE,
   ...
 )
 }
@@ -22,7 +23,9 @@ install_ssurgo_portal(
 
 \item{src}{Default: \code{"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"}}
 
-\item{...}{Additional arguments to \code{download.file()}}
+\item{venv}{Create a virtual environment after installation with \code{create_ssurgo_venv()}? Default: \code{FALSE}}
+
+\item{...}{Additional arguments to \code{create_ssurgo_venv()} when \code{venv=TRUE}.}
 }
 \value{
 Path to downloaded file, or \code{try-error} on error.

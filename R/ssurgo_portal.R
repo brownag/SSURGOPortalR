@@ -227,13 +227,22 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
-.find_python <- function() {
+.find_python <- function(envname = getOption("SSURGOPortalR.virtualenv_name", default = "r-ssurgoportal"), ...) {
   # find python
-  py_path <- Sys.which("python")
-  if (nchar(py_path) == 0) {
-    py_path <- Sys.which("python3")
+  o <- getOption("SSURGOPortalR.python_path", default = NULL)
+  if (!is.null(o)) {
+    return(o)
   }
-  py_path
+  p <- getOption("SSURGOPortalR.virtualenv_name", default = envname)
+  if (nchar(p) == 0 || !.has_reticulate()) {
+    py_path <- Sys.which("python")
+    if (nchar(py_path) == 0) {
+      py_path <- Sys.which("python3")
+    }
+    py_path
+  } else {
+    reticulate::virtualenv_python(envname = p)
+  }
 }
 
 

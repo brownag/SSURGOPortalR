@@ -6,7 +6,8 @@
 #' @param overwrite Overwrite existing .PYZ file? Default: `FALSE`
 #' @param timeout Default: `3000` seconds. Temporarily overrides `options()` for `timeout`.
 #' @param src Default: `"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"`
-#' @param ... Additional arguments to `download.file()`
+#' @param venv Create a virtual environment after installation with `create_ssurgo_venv()`? Default: `FALSE`
+#' @param ... Additional arguments to `create_ssurgo_venv()` when `venv=TRUE`.
 #'
 #' @return Path to downloaded file, or `try-error` on error.
 #' @export
@@ -18,6 +19,7 @@
 #' @importFrom utils download.file
 install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000,
                                   src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
+                                  venv = TRUE,
                                   ...) {
 
   # update 2023/10/19: use WSS link
@@ -39,7 +41,7 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
     message("File ", dst2, " already exists. Set overwrite=TRUE to re-download")
     res <- TRUE
   } else {
-    res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb", ...))
+    res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb"))
     res <- try(suppressWarnings(unzip(dst, exdir = dstd)))
     res <- try(file.copy(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal.*pyz$")[1], dst2, overwrite = TRUE))
     res <- try(file.remove(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal")[1]))
@@ -54,6 +56,10 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
       message("Downloaded SSURGO Portal to: ", dst2)
     }
     return(invisible(dst2))
+  }
+
+  if (venv) {
+    create_ssurgo_venv(...)
   }
 
   message(res[0])
