@@ -227,22 +227,35 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
-.find_python <- function(envname = getOption("SSURGOPortalR.virtualenv_name", default = "r-ssurgoportal"), ...) {
-  # find python
-  o <- getOption("SSURGOPortalR.python_path", default = NULL)
-  if (!is.null(o)) {
-    return(o)
+.find_python <- function(envname = "r-ssurgoportal",
+                         python_version = SSURGOPORTAL_R_DEFAULT_PYTHON_VERSION(),
+                         gdal_version   = SSURGOPORTAL_R_DEFAULT_GDAL_VERSION(), ...) {
+
+  n <- getOption("SSURGOPortalR.virtualenv_name", default = envname)
+  o <- getOption("SSURGOPortalR.python_path", default = "")
+
+  # system python path
+  py_path <- Sys.which("python")
+  if (nchar(py_path) == 0) {
+    py_path <- Sys.which("python3")
   }
-  p <- getOption("SSURGOPortalR.virtualenv_name", default = envname)
-  if (nchar(p) == 0 || !.has_reticulate()) {
-    py_path <- Sys.which("python")
-    if (nchar(py_path) == 0) {
-      py_path <- Sys.which("python3")
+
+  use_reticulate <- .has_reticulate()
+
+  if (nchar(n) == 0 || !use_reticulate || !file.exists(o)) {
+    o <- py_path
+  }
+
+  if (use_reticulate && reticulate::virtualenv_exists(n)) {
+    vpy_path <- reticulate::virtualenv_python(envname = n)
+    if (!file.exists(vpy_path)) {
+      o <- py_path
+    } else {
+      o <- vpy_path
     }
-    py_path
-  } else {
-    reticulate::virtualenv_python(envname = p)
   }
+
+  options(SSURGOPortalR.python_path = o)[[1]]
 }
 
 

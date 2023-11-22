@@ -39,30 +39,11 @@ install_ssurgo_portal_dependencies <- function() {
 
 #' @export
 #' @rdname create_ssurgo_venv
-ssurgo_portal_python <- function(envname = getOption("SSURGOPortalR.virtualenv_name", default = "r-ssurgoportal")) {
+ssurgo_portal_python <- function(envname = getOption("SSURGOPortalR.virtualenv_name",
+                                                     default = "r-ssurgoportal")) {
   if (!.has_reticulate()) {
     envname <- ""
   }
   options(SSURGOPortalR.virtualenv_name = envname)
-  options(SSURGOPortalR.python_path = .rVENV())[[1]]
-}
-
-.rVENV <- function(python_version = SSURGOPORTAL_R_DEFAULT_PYTHON_VERSION(),
-                   gdal_version   = SSURGOPORTAL_R_DEFAULT_GDAL_VERSION()) {
-  n <-  getOption("SSURGOPortalR.virtualenv_name", default = "r-ssurgoportal")
-  o <- .find_python("")
-  if (nchar(n) > 0 && .has_reticulate()) {
-    if (reticulate::virtualenv_exists(n)) {
-      o <- getOption("SSURGOPortalR.python_path", default = NULL)
-      if (is.null(o)) {
-        o <- reticulate::virtualenv_python(n)
-      }
-    } else {
-      o <- create_ssurgo_venv(envname = n,
-                              python_version = python_version,
-                              gdal_version = gdal_version)
-    }
-    options(SSURGOPortalR.python_path = o)
-  }
-  o
+  options(SSURGOPortalR.python_path = .find_python(envname = envname))[[1]]
 }

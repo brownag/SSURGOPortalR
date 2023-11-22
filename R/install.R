@@ -6,7 +6,7 @@
 #' @param overwrite Overwrite existing .PYZ file? Default: `FALSE`
 #' @param timeout Default: `3000` seconds. Temporarily overrides `options()` for `timeout`.
 #' @param src Default: `"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"`
-#' @param venv Create a virtual environment after installation with `create_ssurgo_venv()`? Default: `FALSE`
+#' @param envname Virtual environment to create for installation. Default: `"r-ssurgoportal"`. Use `""` for no virtual environment modifications.
 #' @param ... Additional arguments to `create_ssurgo_venv()` when `venv=TRUE`.
 #'
 #' @return Path to downloaded file, or `try-error` on error.
@@ -19,11 +19,16 @@
 #' @importFrom utils download.file
 install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000,
                                   src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
-                                  venv = TRUE,
+                                  envname = "r-ssurgoportal",
                                   ...) {
 
-  if (venv) {
-    create_ssurgo_venv(...)
+  if (nchar(envname) > 0) {
+    o2 <- try(create_ssurgo_venv(envname = envname,
+                                 python_version = python_version,
+                                 gdal_version = gdal_version))
+    if (inherits(o2, 'try-error'))
+      stop('Failed to create virtual environment `\"', envname,
+           '\"` or install required packages to base environment', call. = FALSE)
   }
 
   # update 2023/10/19: use WSS link
