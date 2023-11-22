@@ -7,7 +7,7 @@
 \usage{
 create_ssurgo_venv(
   envname = "r-ssurgoportal",
-  version = "3.10:latest",
+  python_version = "3.10:latest",
   gdal_version = "3.7.3"
 )
 
@@ -18,7 +18,7 @@ ssurgo_portal_python(
 \arguments{
 \item{envname}{\emph{character}. Python virtual environment name. Default: \code{"r-ssurgoportal"}}
 
-\item{version}{\emph{character}. Semantic version number of 'Python' to install if not available. Default: \code{"3.10:latest"}, the latest version of Python 3.10.x.}
+\item{python_version}{\emph{character}. Semantic version number of 'Python' to install if not available. Default: \code{"3.10:latest"}, the latest version of Python 3.10.x.}
 
 \item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{"3.7.3"}}
 }
