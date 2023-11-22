@@ -15,6 +15,10 @@ SSURGOPORTAL_R_DEFAULT_GDAL_VERSION <-  function() {
   o <- getOption("SSURGOPortalR.gdal_version", default = "")
   if (nchar(o) > 0)
     return(o)
+  i <-  gsub("^GDAL (.*), released .*$|.*", "\\1",
+             try(system("gdalinfo --version", intern = TRUE), silent = TRUE))
+  if (nchar(i) > 0)
+    return(i)
   "3.7.3"
 }
 
