@@ -22,6 +22,10 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
                                   venv = TRUE,
                                   ...) {
 
+  if (venv) {
+    create_ssurgo_venv(...)
+  }
+
   # update 2023/10/19: use WSS link
   # TODO: autoupdate link, use release, build .PYZ from a GH source?
   urx <- src
@@ -56,10 +60,6 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
       message("Downloaded SSURGO Portal to: ", dst2)
     }
     return(invisible(dst2))
-  }
-
-  if (venv) {
-    create_ssurgo_venv(...)
   }
 
   message(res[0])
