@@ -1,18 +1,35 @@
-SSURGOPORTAL_R_PYTHON_VERSION <- function() {
+#' SSURGOPortal Environment Variables
+#'
+#' `SSURGOPORTAL_PYTHON_VERSION()`: returns value of system environment
+#'   variable `R_SSURGOPORTAL_PYTHON_VERSION` or option `SSURGOPortal.python_version`.
+#'   If neither are set then returns `"3.10.2"`, the suggested Python version.
+#'
+#' @return character. Version number for Python or GDAL to be used when building Python environment.
+#' @export
+#' @rdname ssurgo-env-vars
+SSURGOPORTAL_PYTHON_VERSION <- function() {
   s <- Sys.getenv("R_SSURGOPORTAL_PYTHON_VERSION", unset = "")
   if (nchar(s) > 0)
     return(s)
-  o <- getOption("SSURGOPortalR.python_version", default = "")
+  o <- getOption("SSURGOPortal.python_version", default = "")
   if (nchar(o) > 0)
     return(o)
-  "3.10:latest"
+  "3.10.2"
 }
-
-SSURGOPORTAL_R_GDAL_VERSION <-  function() {
+#' `SSURGOPORTAL_GDAL_VERSION()`: returns value of system environment
+#'   variable `R_SSURGOPORTAL_GDAL_VERSION` or option `SSURGOPortal.gdal_version`.
+#'   If neither are set then returns the version returned by running `gdalinfo --version`
+#'   If there is no `gdalinfo` on the path, or other error, the result is `""`
+#'   which is handled as no version constraint. If the version is an empty string,
+#'   the most recent version of the library will be installed. The latest version
+#'   may not be compatible with installed versions of libgdal, etc.
+#' @export
+#' @rdname ssurgo-env-vars
+SSURGOPORTAL_GDAL_VERSION <-  function() {
   s <- Sys.getenv("R_SSURGOPORTAL_GDAL_VERSION", unset = "")
   if (nchar(s) > 0)
     return(s)
-  o <- getOption("SSURGOPortalR.gdal_version", default = "")
+  o <- getOption("SSURGOPortal.gdal_version", default = "")
   if (nchar(o) > 0)
     return(o)
   i <- .get_system_gdal_version()

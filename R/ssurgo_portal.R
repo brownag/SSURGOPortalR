@@ -231,8 +231,8 @@ ssurgo_portal <- function(request = NULL,
                          python_version = SSURGOPORTAL_R_PYTHON_VERSION(),
                          gdal_version   = SSURGOPORTAL_R_GDAL_VERSION(), ...) {
 
-  n <- getOption("SSURGOPortalR.virtualenv_name", default = envname)
-  o <- getOption("SSURGOPortalR.python_path", default = "")
+  n <- getOption("SSURGOPortal.virtualenv_name", default = envname)
+  o <- getOption("SSURGOPortal.python_path", default = "")
 
   # system python path
   py_path <- Sys.which("python")
@@ -255,7 +255,7 @@ ssurgo_portal <- function(request = NULL,
     }
   }
 
-  options(SSURGOPortalR.python_path = o)[[1]]
+  options(SSURGOPortal.python_path = o)[[1]]
 }
 
 

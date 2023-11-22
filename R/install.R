@@ -25,8 +25,8 @@ install_ssurgo_portal <- function(
     timeout = 3000,
     src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
     envname = "r-ssurgoportal",
-    python_version = "3.10.2",
-    gdal_version = "",
+    python_version = SSURGOPORTAL_PYTHON_VERSION(),
+    gdal_version = SSURGOPORTAL_GDAL_VERSION(),
     ...
 ) {
 
@@ -47,7 +47,7 @@ install_ssurgo_portal <- function(
 
   optorig <- getOption("timeout")
   on.exit(options(timeout = optorig))
-  options(timeout = 3000)
+  options(timeout = timeout)
   dstd <- ssurgo_portal_dir("data")
   dst <- file.path(dstd, "SSURGOPortal.pyz.zip")
   dst2 <- file.path(dstd, "SSURGOPortal.pyz")

@@ -7,24 +7,26 @@
 \usage{
 create_ssurgo_venv(
   envname = "r-ssurgoportal",
-  python_version = "3.10.2",
-  gdal_version = ""
+  python_version = SSURGOPORTAL_PYTHON_VERSION(),
+  gdal_version = SSURGOPORTAL_GDAL_VERSION()
 )
 
 ssurgo_portal_python(
-  envname = getOption("SSURGOPortalR.virtualenv_name", default = "r-ssurgoportal")
+  envname = getOption("SSURGOPortal.virtualenv_name", default = "r-ssurgoportal")
 )
 }
 \arguments{
 \item{envname}{\emph{character}. Python virtual environment name. Default: \code{"r-ssurgoportal"}}
 
-\item{python_version}{\emph{character}. Semantic version number of 'Python' to install if not available. Default: \code{"3.10:latest"}, the latest version of Python 3.10.x.}
+\item{python_version}{\emph{character}. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"}
 
-\item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{"3.7.3"}}
+\item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{""} for no specific version.}
 }
 \value{
 \emph{character}. Path to virtual environment Python binary (invisible).
 }
 \description{
-Uses reticulate to create a virtual environment with the SSURGO Portal dependencies. Select the environment name, default \code{"r-ssurgoportal"}, along with the specific Python and GDAL versions.
+Uses 'reticulate' to create a virtual environment with the SSURGO Portal
+dependencies. Select the environment name, default \code{"r-ssurgoportal"},
+along with the specific Python and GDAL versions.
 }
