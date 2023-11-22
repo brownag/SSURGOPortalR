@@ -1,5 +1,5 @@
-SSURGOPORTAL_R_DEFAULT_PYTHON_VERSION <- function() {
-  s <- Sys.getenv("SSURGOPORTAL_R_DEFAULT_PYTHON_VERSION", unset = "")
+SSURGOPORTAL_R_PYTHON_VERSION <- function() {
+  s <- Sys.getenv("SSURGOPORTAL_R_PYTHON_VERSION", unset = "")
   if (nchar(s) > 0)
     return(s)
   o <- getOption("SSURGOPortalR.python_version", default = "")
@@ -8,18 +8,25 @@ SSURGOPORTAL_R_DEFAULT_PYTHON_VERSION <- function() {
   "3.10:latest"
 }
 
-SSURGOPORTAL_R_DEFAULT_GDAL_VERSION <-  function() {
-  s <- Sys.getenv("SSURGOPORTAL_R_DEFAULT_GDAL_VERSION", unset = "")
+SSURGOPORTAL_R_GDAL_VERSION <-  function() {
+  s <- Sys.getenv("SSURGOPORTAL_R_GDAL_VERSION", unset = "")
   if (nchar(s) > 0)
     return(s)
   o <- getOption("SSURGOPortalR.gdal_version", default = "")
   if (nchar(o) > 0)
     return(o)
-  i <-  gsub("^GDAL (.*), released .*$|.*", "\\1",
-             try(system("gdalinfo --version", intern = TRUE), silent = TRUE))
+  i <- .get_system_gdal_version()
   if (nchar(i) > 0)
     return(i)
-  "3.7.3"
+  ""
+}
+
+.get_system_gdal_version <- function() {
+  as.character(gsub("^GDAL (.*), released .*$|.*", "\\1",
+                    try(system(paste(
+                      Sys.which("gdalinfo"), "--version"
+                    ), intern = TRUE), silent = TRUE)
+  ))
 }
 
 .has_reticulate <- function() {
@@ -29,8 +36,8 @@ SSURGOPORTAL_R_DEFAULT_GDAL_VERSION <-  function() {
 
 #' @importFrom utils packageVersion
 .onAttach <- function(libname, pkgname) {
-  pyp <- ssurgo_portal_python()
-  ssp <- file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+  pyp <- normalizePath(ssurgo_portal_python(), "/")
+  ssp <- normalizePath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz"), "/")
   packageStartupMessage("SSURGOPortal R Interface v",
                         utils::packageVersion("SSURGOPortal"),
                         "\n\tPython: ", ifelse(length(pyp) > 0 && file.exists(pyp),

@@ -9,12 +9,14 @@
 #' @return _character_. Path to virtual environment Python binary (invisible).
 #' @export
 create_ssurgo_venv <- function(envname = "r-ssurgoportal",
-                               python_version = "3.10:latest",
-                               gdal_version = "3.7.3") {
+                               python_version = "3.10.2",
+                               gdal_version = "") {
   if (!.has_reticulate()) {
     stop("please install the 'reticulate' package to manage virtual environments", call. = FALSE)
   }
-  pkg <- c("bottle", "jsonschema", "requests", paste0("gdal==", gdal_version))
+  pkg <- c("bottle", "jsonschema", "requests",
+           ifelse(!is.null(gdal_version) && nchar(gdal_version) > 0,
+                  paste0("gdal==", gdal_version), "gdal"))
   if (nchar(envname) > 0) {
     if (!reticulate::py_available(initialize = TRUE)) {
       reticulate::install_python(version = python_version)

@@ -7,8 +7,8 @@
 \usage{
 create_ssurgo_venv(
   envname = "r-ssurgoportal",
-  python_version = "3.10:latest",
-  gdal_version = "3.7.3"
+  python_version = "3.10.2",
+  gdal_version = ""
 )
 
 ssurgo_portal_python(

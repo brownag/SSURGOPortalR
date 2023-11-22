@@ -10,7 +10,9 @@ install_ssurgo_portal(
   timeout = 3000,
   src =
     "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
-  venv = TRUE,
+  envname = "r-ssurgoportal",
+  python_version = "3.10.2",
+  gdal_version = "",
   ...
 )
 }
@@ -23,7 +25,11 @@ install_ssurgo_portal(
 
 \item{src}{Default: \code{"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"}}
 
-\item{venv}{Create a virtual environment after installation with \code{create_ssurgo_venv()}? Default: \code{FALSE}}
+\item{envname}{Virtual environment to create for installation. Default: \code{"r-ssurgoportal"}. Use \code{""} for no virtual environment modifications.}
+
+\item{python_version}{\emph{character}. Semantic version number of 'Python' to install if not available. Default: \code{"3.10.2"}}
+
+\item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{""}}
 
 \item{...}{Additional arguments to \code{create_ssurgo_venv()} when \code{venv=TRUE}.}
 }

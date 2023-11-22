@@ -228,8 +228,8 @@ ssurgo_portal <- function(request = NULL,
 }
 
 .find_python <- function(envname = "r-ssurgoportal",
-                         python_version = SSURGOPORTAL_R_DEFAULT_PYTHON_VERSION(),
-                         gdal_version   = SSURGOPORTAL_R_DEFAULT_GDAL_VERSION(), ...) {
+                         python_version = SSURGOPORTAL_R_PYTHON_VERSION(),
+                         gdal_version   = SSURGOPORTAL_R_GDAL_VERSION(), ...) {
 
   n <- getOption("SSURGOPortalR.virtualenv_name", default = envname)
   o <- getOption("SSURGOPortalR.python_path", default = "")

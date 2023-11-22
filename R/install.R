@@ -8,6 +8,8 @@
 #' @param src Default: `"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"`
 #' @param envname Virtual environment to create for installation. Default: `"r-ssurgoportal"`. Use `""` for no virtual environment modifications.
 #' @param ... Additional arguments to `create_ssurgo_venv()` when `venv=TRUE`.
+#' @param python_version _character_. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"`
+#' @param gdal_version _character_. Semantic version number of 'GDAL' package to install. Default: `""`
 #'
 #' @return Path to downloaded file, or `try-error` on error.
 #' @export
@@ -17,18 +19,26 @@
 #'  install_ssurgo_portal()
 #' }
 #' @importFrom utils download.file
-install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000,
-                                  src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
-                                  envname = "r-ssurgoportal",
-                                  ...) {
+install_ssurgo_portal <- function(
+    verbose = TRUE,
+    overwrite = FALSE,
+    timeout = 3000,
+    src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
+    envname = "r-ssurgoportal",
+    python_version = "3.10.2",
+    gdal_version = "",
+    ...
+) {
 
   if (nchar(envname) > 0) {
     o2 <- try(create_ssurgo_venv(envname = envname,
                                  python_version = python_version,
                                  gdal_version = gdal_version))
+
     if (inherits(o2, 'try-error'))
       stop('Failed to create virtual environment `\"', envname,
            '\"` or install required packages to base environment', call. = FALSE)
+
   }
 
   # update 2023/10/19: use WSS link
