@@ -26,7 +26,10 @@ SSURGOPORTAL_R_DEFAULT_GDAL_VERSION <-  function() {
 .onLoad <- function(libname, pkgname) {
   pyp <- ssurgo_portal_python()
   ssp <- file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
-  packageStartupMessage("SSURGOPortal R Interface v", packageVersion("SSURGOPortal"),
-                        "\n        \tPython: ", pyp,
-                        "\n   \t SSURGO Portal: ", ifelse(file.exists(ssp), ssp, "<not found>"))
+  packageStartupMessage("SSURGOPortal R Interface v",
+                        packageVersion("SSURGOPortal"),
+                        "\n\tPython: ", ifelse(length(pyp) > 0 && file.exists(pyp),
+                                                 pyp, "<not found>"),
+                        "\n SSURGO Portal: ", ifelse(length(ssp) > 0 && file.exists(ssp),
+                                                       ssp, "<not found>"))
 }
