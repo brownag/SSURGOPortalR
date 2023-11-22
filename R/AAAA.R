@@ -1,5 +1,5 @@
 SSURGOPORTAL_R_PYTHON_VERSION <- function() {
-  s <- Sys.getenv("SSURGOPORTAL_R_PYTHON_VERSION", unset = "")
+  s <- Sys.getenv("R_SSURGOPORTAL_PYTHON_VERSION", unset = "")
   if (nchar(s) > 0)
     return(s)
   o <- getOption("SSURGOPortalR.python_version", default = "")
@@ -9,7 +9,7 @@ SSURGOPORTAL_R_PYTHON_VERSION <- function() {
 }
 
 SSURGOPORTAL_R_GDAL_VERSION <-  function() {
-  s <- Sys.getenv("SSURGOPORTAL_R_GDAL_VERSION", unset = "")
+  s <- Sys.getenv("R_SSURGOPORTAL_GDAL_VERSION", unset = "")
   if (nchar(s) > 0)
     return(s)
   o <- getOption("SSURGOPortalR.gdal_version", default = "")
