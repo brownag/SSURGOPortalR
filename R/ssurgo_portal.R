@@ -94,7 +94,7 @@ ssurgo_portal <- function(request = NULL,
   if (missing(request) || is.null(request)) {
 
     cmd <- paste0(shQuote(c(
-      .find_python(),
+      ssurgo_portal_python(),
       file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
     )), collapse = ' ')
 
@@ -134,7 +134,7 @@ ssurgo_portal <- function(request = NULL,
     req$subfolders <- as.list(req$subfolders)
   }
 
-  py_path <- .find_python()
+  py_path <- ssurgo_portal_python()
 
   # additional arguments (...) are passed in JSON w/ request type
   if (schema) {
@@ -228,17 +228,18 @@ ssurgo_portal <- function(request = NULL,
 }
 
 .find_python <- function(envname = "r-ssurgoportal",
-                         python_version = SSURGOPORTAL_R_PYTHON_VERSION(),
-                         gdal_version   = SSURGOPORTAL_R_GDAL_VERSION(), ...) {
-
-  n <- getOption("SSURGOPortal.virtualenv_name", default = envname)
-  o <- getOption("SSURGOPortal.python_path", default = "")
+                         python_version = SSURGOPORTAL_PYTHON_VERSION(),
+                         gdal_version   = SSURGOPORTAL_GDAL_VERSION(), ...) {
 
   # system python path
   py_path <- Sys.which("python")
+
   if (nchar(py_path) == 0) {
     py_path <- Sys.which("python3")
   }
+
+  n <- getOption("SSURGOPortal.virtualenv_name", default = envname)
+  o <- getOption("SSURGOPortal.python_path", default = py_path)
 
   use_reticulate <- .has_reticulate()
 

@@ -53,8 +53,8 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
 
 #' @importFrom utils packageVersion
 .onAttach <- function(libname, pkgname) {
-  pyp <- normalizePath(ssurgo_portal_python(), "/")
-  ssp <- normalizePath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz"), "/")
+  pyp <- suppressWarnings(normalizePath(ssurgo_portal_python(), "/"))
+  ssp <- suppressWarnings(normalizePath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz"), "/"))
   packageStartupMessage("SSURGOPortal R Interface v",
                         utils::packageVersion("SSURGOPortal"),
                         "\n\tPython: ", ifelse(length(pyp) > 0 && file.exists(pyp),
