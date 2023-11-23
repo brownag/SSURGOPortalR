@@ -23,7 +23,7 @@ jobs:
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.4.3'}
           - {os: ubuntu-latest,   r: 'devel', python: '3.12', gdal: '3.4.3'}
           - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.4.3'}
-          - {os: ubuntu-latest,   r: '4.0', python: '3.10', gdal: '3.4.3'}
+          - {os: ubuntu-20.04,   r: '4.0', python: '3.10', gdal: '3.4.3'}
 
     env:
       R_SSURGOPORTAL_GDAL_VERSION: ${{ matrix.config.gdal }}
@@ -38,16 +38,17 @@ jobs:
           python-version: ${{ matrix.config.python }} 
           architecture: 'x64' 
 
-#      - uses: conda-incubator/setup-miniconda@v2
-#        if: runner.os == 'Windows'
-#        with:
-#          miniconda-version: "latest"
-#          activate-environment: r-ssurgoportal
-#      - name: Install system and Python dependencies (windows)
-#        if: runner.os == 'Windows'
-#        run: |
-#          conda install -c conda-forge pip wheel numpy bottle jsonschema gdal
+      - uses: conda-incubator/setup-miniconda@v2
+        if: runner.os == 'Windows'
+        with:
+          miniconda-version: "latest"
+          activate-environment: r-reticulate
 
+      - name: Install system and Python dependencies (windows)
+        if: runner.os == 'Windows'
+        run: |
+          conda install -c conda-forge gdal
+          
       - name: Install system and Python dependencies (ubuntu)
         if: runner.os != 'macOS' && runner.os != 'Windows'
         run: |
