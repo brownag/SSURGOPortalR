@@ -19,11 +19,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,    r: 'release', python: '3.11', gdal: '3.6.4'}
+          - {os: macos-latest,    r: 'release', python: '3.12', gdal: '3.8.0'}
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.8.0'}
           - {os: ubuntu-latest,   r: 'devel', python: '3.12', gdal: '3.4.3'}
           - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.4.3'}
-          - {os: ubuntu-20.04,   r: '4.0', python: '3.10', gdal: '3.3.2'}
+          - {os: ubuntu-20.04,   r: '4.0', python: '3.8', gdal: '3.3.2'}
 
     env:
       R_SSURGOPORTAL_GDAL_VERSION: ${{ matrix.config.gdal }}
@@ -42,7 +42,7 @@ jobs:
         if: runner.os == 'Windows'
         with:
           miniconda-version: "latest"
-          activate-environment: r-reticulate
+          activate-environment: r-ssurgoportal
 
       - name: Install system and Python dependencies (windows)
         if: runner.os == 'Windows'
@@ -55,17 +55,17 @@ jobs:
           sudo add-apt-repository ppa:ubuntugis/ppa
           sudo apt update
           sudo apt install gdal-bin libgdal-dev
-#          python -m pip install -U pip
-#          python -m pip install -U wheel numpy
-#          python -m pip install bottle jsonschema gdal==3.4.3
+          python -m pip install -U pip
+          python -m pip install -U wheel numpy
+          python -m pip install bottle jsonschema gdal==${{ matrix.config.gdal }}
 
       - name: Install system and Python dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install gdal@3.6.4
-#          python -m pip install -U pip
-#          python -m pip install -U wheel numpy
-#          python -m pip install bottle jsonschema gdal==3.6.4
+          brew install gdal
+          python -m pip install -U pip
+          python -m pip install -U wheel numpy
+          python -m pip install bottle jsonschema gdal==${{ matrix.config.gdal }}
         
       - uses: r-lib/actions/setup-pandoc@v2
 
