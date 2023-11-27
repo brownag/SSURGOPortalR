@@ -30,7 +30,7 @@ test_that("ssurgo_portal() works (template only, no SSURGO data)", {
   .expect_response(ssurgo_portal("getstatus", schema = TRUE))
 
   # sample subdirectory
-  dir.create("foo")
+  dir.create("foo", showWarnings = FALSE)
 
   # inspect folder tree
   .expect_nodes(ssurgo_portal(

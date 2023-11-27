@@ -227,9 +227,7 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
-.find_python <- function(envname = "r-ssurgoportal",
-                         python_version = SSURGOPORTAL_PYTHON_VERSION(),
-                         gdal_version   = SSURGOPORTAL_GDAL_VERSION(), ...) {
+.find_python <- function(envname = "r-ssurgoportal") {
 
   # system python path
   py_path <- Sys.which("python")
@@ -255,11 +253,15 @@ ssurgo_portal <- function(request = NULL,
       o <- vpy_path
     }
 
+  }
+
+  if (use_reticulate) {
     # make sure reticulate uses the venv python if it exists
     reticulate::use_python(o)
   }
 
-  options(SSURGOPortal.python_path = o)[[1]]
+  options(SSURGOPortal.python_path = o)
+  o
 }
 
 

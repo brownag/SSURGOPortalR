@@ -8,11 +8,13 @@
 create_ssurgo_venv(
   envname = "r-ssurgoportal",
   python_version = SSURGOPORTAL_PYTHON_VERSION(),
-  gdal_version = SSURGOPORTAL_GDAL_VERSION()
+  gdal_version = SSURGOPORTAL_GDAL_VERSION(),
+  ...
 )
 
 ssurgo_portal_python(
-  envname = getOption("SSURGOPortal.virtualenv_name", default = "r-ssurgoportal")
+  envname = getOption("SSURGOPortal.virtualenv_name", default = "r-ssurgoportal"),
+  ...
 )
 }
 \arguments{
@@ -21,6 +23,8 @@ ssurgo_portal_python(
 \item{python_version}{\emph{character}. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"}
 
 \item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{""} for no specific version.}
+
+\item{...}{Additional arguments not (currently) used.}
 }
 \value{
 \emph{character}. Path to virtual environment Python binary (invisible).

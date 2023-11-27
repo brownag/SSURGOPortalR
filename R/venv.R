@@ -7,12 +7,14 @@
 #' @param envname _character_. Python virtual environment name. Default: `"r-ssurgoportal"`
 #' @param python_version _character_. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"
 #' @param gdal_version _character_. Semantic version number of 'GDAL' package to install. Default: `""` for no specific version.
+#' @param ... Additional arguments not (currently) used.
 #'
 #' @return _character_. Path to virtual environment Python binary (invisible).
 #' @export
 create_ssurgo_venv <- function(envname = "r-ssurgoportal",
                                python_version = SSURGOPORTAL_PYTHON_VERSION(),
-                               gdal_version = SSURGOPORTAL_GDAL_VERSION()) {
+                               gdal_version = SSURGOPORTAL_GDAL_VERSION(),
+                               ...) {
   if (!.has_reticulate()) {
     stop("please install the 'reticulate' package to manage virtual environments", call. = FALSE)
   }
@@ -52,7 +54,7 @@ install_ssurgo_portal_dependencies <- function() {
 #' @export
 #' @rdname create_ssurgo_venv
 ssurgo_portal_python <- function(envname = getOption("SSURGOPortal.virtualenv_name",
-                                                     default = "r-ssurgoportal")) {
+                                                     default = "r-ssurgoportal"), ...) {
   r <- .has_reticulate()
   if (missing(envname) && !r) {
     envname <- ""
@@ -60,5 +62,5 @@ ssurgo_portal_python <- function(envname = getOption("SSURGOPortal.virtualenv_na
   p <- .find_python(envname = envname)
   options(SSURGOPortal.virtualenv_name = envname)
   options(SSURGOPortal.python_path = p)
-  getOption("SSURGOPortal.python_path")[[1]]
+  getOption("SSURGOPortal.python_path")
 }
