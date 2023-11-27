@@ -254,6 +254,9 @@ ssurgo_portal <- function(request = NULL,
     } else {
       o <- vpy_path
     }
+
+    # make sure reticulate uses the venv python if it exists
+    reticulate::use_python(o)
   }
 
   options(SSURGOPortal.python_path = o)[[1]]

@@ -53,9 +53,12 @@ install_ssurgo_portal_dependencies <- function() {
 #' @rdname create_ssurgo_venv
 ssurgo_portal_python <- function(envname = getOption("SSURGOPortal.virtualenv_name",
                                                      default = "r-ssurgoportal")) {
-  if (!.has_reticulate()) {
+  r <- .has_reticulate()
+  if (missing(envname) && !r) {
     envname <- ""
   }
+  p <- .find_python(envname = envname)
   options(SSURGOPortal.virtualenv_name = envname)
-  options(SSURGOPortal.python_path = .find_python(envname = envname))[[1]]
+  options(SSURGOPortal.python_path = p)
+  getOption("SSURGOPortal.python_path")[[1]]
 }
