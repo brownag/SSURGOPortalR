@@ -250,14 +250,12 @@ ssurgo_portal <- function(request = NULL,
     if (!file.exists(vpy_path)) {
       o <- py_path
     } else {
-      o <- vpy_path
+      # make sure reticulate uses the venv python if it exists
+      # TODO: silence error when already initialized? or make it look nicer?
+      vpy <- try(reticulate::use_python(vpy_path), silent = FALSE)
+      if (!inherits(vpy, 'try-error'))
+        o <- vpy_path
     }
-
-  }
-
-  if (use_reticulate) {
-    # make sure reticulate uses the venv python if it exists
-    reticulate::use_python(o)
   }
 
   options(SSURGOPortal.python_path = o)
