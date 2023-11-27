@@ -39,6 +39,7 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
         reticulate::py_install(pkg)
       }
 
+      # TODO: somehow flag if user install has taken place
       if (inherits(res1, 'try-error')) {
         system(paste(.find_python(""), "-m pip install --user ", paste(pkg, collapse = " ")))
       }
