@@ -23,7 +23,7 @@ jobs:
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.8.0'}
           - {os: ubuntu-latest,   r: 'devel', python: '3.12', gdal: '3.4.3'}
           - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.4.3'}
-          - {os: ubuntu-20.04,   r: '4.0', python: '3.8', gdal: '3.3.2'}
+          - {os: ubuntu-20.04,   r: '4.0', python: '3.9', gdal: '3.3.2'}
 
     env:
       R_SSURGOPORTAL_GDAL_VERSION: ${{ matrix.config.gdal }}
@@ -61,7 +61,6 @@ jobs:
 
       - name: Install system and Python dependencies (macOS)
         if: runner.os == 'macOS'
-        continue-on-error: true
         run: |
           brew tap-new $USER/local-gdal
           brew extract --version=${{ matrix.config.gdal }} gdal $USER/local-gdal
