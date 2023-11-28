@@ -50,7 +50,7 @@ install_ssurgo_portal <- function(
   options(timeout = timeout)
   dstd <- ssurgo_portal_dir("data")
   dst <- file.path(dstd, "SSURGOPortal.pyz.zip")
-  dst2 <- file.path(dstd, "SSURGOPortal.pyz")
+  dst2 <- normalizePath(file.path(dstd, "SSURGOPortal.pyz"), winslash = "/", mustWork = FALSE)
 
   if (!dir.exists(dstd)) {
     dir.create(dstd, recursive = TRUE)
