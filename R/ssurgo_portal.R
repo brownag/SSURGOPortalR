@@ -264,10 +264,15 @@ ssurgo_portal <- function(request = NULL,
 
 
 .syscall <- function(cmd) {
-  system(cmd,
-                 wait = FALSE,
-                 intern = TRUE,
-                 ignore.stdout = FALSE,
-                 ignore.stderr = FALSE,
-         input = c("p", "\r"))
+  res <- try(system(
+    cmd,
+    wait = FALSE,
+    intern = TRUE,
+    ignore.stdout = FALSE,
+    ignore.stderr = FALSE,
+    input = c("p", "\r")
+  ), silent = FALSE)
+  # use message so it can be suppressMessages()'d
+  message(paste0(res, collapse = "\n"))
+  res
 }
