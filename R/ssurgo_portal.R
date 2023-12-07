@@ -95,7 +95,7 @@ ssurgo_portal <- function(request = NULL,
 
     cmd <- paste0(shQuote(c(
       ssurgo_portal_python(),
-      file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+      pyz_path = pyz_path,
     )), collapse = ' ')
 
     if (command_only) {
@@ -265,9 +265,9 @@ ssurgo_portal <- function(request = NULL,
 
 .syscall <- function(cmd) {
   system(cmd,
-         wait = FALSE,
-         intern = TRUE,
-         ignore.stdout = FALSE,
-         ignore.stderr = FALSE,
+                 wait = FALSE,
+                 intern = TRUE,
+                 ignore.stdout = FALSE,
+                 ignore.stderr = FALSE,
          input = c("p", "\r"))
 }
