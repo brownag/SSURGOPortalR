@@ -95,7 +95,7 @@ ssurgo_portal <- function(request = NULL,
 
     cmd <- paste0(shQuote(c(
       ssurgo_portal_python(),
-      pyz_path = pyz_path,
+      pyz_path,
     )), collapse = ' ')
 
     if (command_only) {
