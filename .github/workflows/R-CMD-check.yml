@@ -77,7 +77,7 @@ jobs:
           python -m pip install -U pip
           python -m pip install -U wheel numpy
           brew install gdal
-          python -m pip install bottle jsonschema gdal==${{ matrix.config.gdal }
+          python -m pip install bottle jsonschema gdal==${{ matrix.config.gdal }}
 #           brew tap-new $USER/local-gdal
 #           brew extract --version=${{ matrix.config.gdal }} gdal $USER/local-gdal
 #           brew install gdal@${{ matrix.config.gdal }}
