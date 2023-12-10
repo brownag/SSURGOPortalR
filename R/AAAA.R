@@ -52,6 +52,7 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
 }
 
 #' @importFrom utils packageVersion
+#' @importFrom reticulate virtualenv_exists condaenv_exists
 .onAttach <- function(libname, pkgname) {
 
   sev <- as.logical(Sys.getenv("R_SSURGOPORTAL_USE_VIRTUALENV", unset = "TRUE"))
@@ -63,15 +64,15 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
       interactive() &&
       getOption("SSURGOPortal.use_virtualenv", default = sev)) {
 
-    # default behavior is to use a virtual environment "r-ssurgoportal" TODO: conda?)
+    # default behavior is to use a virtual environment "r-ssurgoportal"
     ven <- getOption("SSURGOPortal.virtualenv_name", default = "r-ssurgoportal")
 
-    if (!reticulate::virtualenv_exists(ven))
+    if (!reticulate::virtualenv_exists(ven) && !reticulate::condaenv_exists(ven))
       create_ssurgo_venv(ven)
   }
-
-  pyp <- suppressWarnings(normalizePath(ssurgo_portal_python(), "/"))
-  ssp <- suppressWarnings(normalizePath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz"), "/"))
+  .winpath <- function(x) if (Sys.info()["sysname"] == "Windows") normalizePath(x, "/") else x
+  pyp <- suppressWarnings(.winpath(ssurgo_portal_python()))
+  ssp <- suppressWarnings(.winpath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")))
   packageStartupMessage("SSURGOPortal R Interface v",
                         utils::packageVersion("SSURGOPortal"),
                         "\n\tPython: ", ifelse(length(pyp) > 0 && file.exists(pyp),

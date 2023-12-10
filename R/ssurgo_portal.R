@@ -227,6 +227,8 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
+#' @importFrom reticulate virtualenv_exists virtualenv_python conda_python use_python
+#' @importFrom utils tail
 .find_python <- function(envname = "r-ssurgoportal") {
 
   # system python path
@@ -246,9 +248,14 @@ ssurgo_portal <- function(request = NULL,
   }
 
   if (use_reticulate && reticulate::virtualenv_exists(n)) {
-    vpy_path <- reticulate::virtualenv_python(envname = n)
+    vpy_path <- utils::tail(reticulate::virtualenv_python(envname = n), 1)
     if (!file.exists(vpy_path)) {
-      o <- py_path
+      co_path <- utils::tail(reticulate::conda_python(envname = n), 1)
+      if (file.exists(co_path)) {
+        o <- co_path
+      } else {
+        o <- py_path
+      }
     } else {
       # make sure reticulate uses the venv python if it exists
       # TODO: silence error when already initialized? or make it look nicer?
