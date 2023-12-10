@@ -9,9 +9,9 @@ Depends: R (>= 4.0)
 SystemRequirements: Python (>= 3.9.0)
 Imports: 
   utils, 
+  reticulate,
   jsonlite
 Suggests:
-  reticulate,
   soilDB,
   terra,
   testthat (>= 3.0.0),
