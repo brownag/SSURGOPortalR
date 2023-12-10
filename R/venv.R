@@ -31,10 +31,13 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
   if (nchar(envname) > 0) {
 
     if (!reticulate::py_available(initialize = FALSE)) {
-      reticulate::install_python(version = python_version)
+      ipyv <- strsplit(python_version, ".", fixed = TRUE)[[1]]
+      ipvv <- ifelse(length(ipyv) == 2, paste0(python_version, ":latest"), python_version)
+      reticulate::install_python(version = ipvv)
     }
 
     if (!reticulate::virtualenv_exists(envname = envname)) {
+
       res1 <- try(reticulate::virtualenv_create(envname = envname),
                   silent = TRUE)
 
