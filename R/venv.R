@@ -20,8 +20,12 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
   }
 
   pkg <- c("bottle", "jsonschema", "requests",
-           ifelse(!is.null(gdal_version) && nchar(gdal_version) > 0,
-                  paste0("gdal==", gdal_version), "gdal"))
+           ifelse(Sys.info()$sysname == "Windows", character(0),
+                  ifelse(
+                    !is.null(gdal_version) && nchar(gdal_version) > 0,
+                    paste0("gdal==", gdal_version),
+                    "gdal"
+                  )))
 
   if (nchar(envname) > 0) {
 
@@ -35,7 +39,24 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
       res2 <- try(reticulate::virtualenv_install(envname = envname, packages = pkg),
                   silent = TRUE)
 
-      if (!inherits(res1, 'try-error') && inherits(res2, 'try-error')) {
+      if (Sys.info()['sysname'] == "Windows" && !inherits(res2, 'try-error')) {
+
+        if (!requireNamespace("rgeowheels")) {
+          stop("package 'rgeowheels' is required to install GDAL on Windows, download it here: https://github.com/brownag/rgeowheels/")
+        }
+
+        system(paste(shQuote(reticulate::virtualenv_python(envname = envname)),
+                     "-m pip install", rgeowheels::install_wheel(
+                       "GDAL",
+                       pyversion = python_version,
+                       version = gdal_version,
+                       architecture = ifelse(grepl("arm", Sys.info()['machine']),
+                                             "win_arm64", "win_amd64"),
+                       download_only = TRUE
+                     ), collapse = ' '))
+      }
+
+      if (inherits(res1, 'try-error') || inherits(res2, 'try-error')) {
         reticulate::py_install(pkg)
       }
 

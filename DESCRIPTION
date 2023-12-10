@@ -14,7 +14,10 @@ Suggests:
   reticulate,
   soilDB,
   terra,
-  testthat (>= 3.0.0)
+  testthat (>= 3.0.0),
+  rgeowheels
+Remotes:
+  brownag/rgeowheels
 License: CC0
 Encoding: UTF-8
 LazyData: true

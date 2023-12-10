@@ -56,9 +56,9 @@ jobs:
       - name: Install system and Python dependencies (windows)
         if: runner.os == 'Windows'
         run: |
-          Rscript -e "install.packages('remotes')"
+          Rscript -e "install.packages(c('remotes', 'rvest'))"
           Rscript -e "remotes::install_github('brownag/rgeowheels')"
-          Rscript -e "rgeowheels::install_wheel('GDAL', version='${{ matrix.config.gdal }}', pyversion='${{ matrix.config.python }}')"
+#          Rscript -e "rgeowheels::install_wheel('GDAL', version='${{ matrix.config.gdal }}', pyversion='${{ matrix.config.python }}')"
 #          conda install -c conda-forge gdal
 
       - name: Install system and Python dependencies (ubuntu)
