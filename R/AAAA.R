@@ -69,7 +69,10 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
 
     if (!reticulate::virtualenv_exists(ven) && !reticulate::condaenv_exists(ven))
       create_ssurgo_venv(ven)
+
+    reticulate::use_python(ssurgo_portal_python(envname = ven))
   }
+
   .winpath <- function(x) if (Sys.info()["sysname"] == "Windows") normalizePath(x, "/") else x
   pyp <- suppressWarnings(.winpath(ssurgo_portal_python()))
   ssp <- suppressWarnings(.winpath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")))
