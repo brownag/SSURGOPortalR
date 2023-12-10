@@ -20,12 +20,13 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
   }
 
   pkg <- c("bottle", "jsonschema", "requests",
-           ifelse(Sys.info()['sysname'] == "Windows", character(0),
+           ifelse(Sys.info()['sysname'] == "Windows", "",
                   ifelse(
                     !is.null(gdal_version) && nchar(gdal_version) > 0,
                     paste0("gdal==", gdal_version),
                     "gdal"
                   )))
+  pkg <- pkg[nchar(pkg) > 0]
 
   if (nchar(envname) > 0) {
 
