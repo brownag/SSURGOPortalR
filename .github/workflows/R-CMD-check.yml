@@ -20,7 +20,7 @@ jobs:
       matrix:
         config:
           - {os: macos-latest,    r: 'release', python: '3.12', gdal: '3.7.2'}
-          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.8.0'}
+          - {os: windows-latest,  r: 'release', python: '3.12', gdal: '3.7.3'}
           - {os: ubuntu-latest,   r: 'devel', python: '3.12', gdal: '3.4.3'}
           - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.4.3'}
           - {os: ubuntu-20.04,   r: '4.0', python: '3.9', gdal: '3.3.2'}
@@ -58,7 +58,7 @@ jobs:
         run: |
           Rscript -e "install.packages('remotes')"
           Rscript -e "remotes::install_github('brownag/rgeowheels')"
-          Rscript -e "rgeowheels::install_wheel('GDAL')"
+          Rscript -e "rgeowheels::install_wheel('GDAL', version='${{ matrix.config.gdal }}', pyversion='${{ matrix.config.python }}')"
 #          conda install -c conda-forge gdal
 
       - name: Install system and Python dependencies (ubuntu)
