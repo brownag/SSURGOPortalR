@@ -30,13 +30,19 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
 
   if (nchar(envname) > 0) {
 
-    if (!reticulate::py_available(initialize = TRUE)) {
+    if (!reticulate::py_available(initialize = FALSE)) {
       reticulate::install_python(version = python_version)
     }
 
     if (!reticulate::virtualenv_exists(envname = envname)) {
       res1 <- try(reticulate::virtualenv_create(envname = envname),
                   silent = TRUE)
+
+      if (!reticulate::py_available(initialize = TRUE)) {
+        message("failed to initialize virtualenv python")
+      }
+
+      # TODO: install missing packages into existing environments
       res2 <- try(reticulate::virtualenv_install(envname = envname, packages = pkg),
                   silent = TRUE)
 
