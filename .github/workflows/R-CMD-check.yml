@@ -20,8 +20,8 @@ jobs:
       matrix:
         config:
           - {os: macos-latest,    r: 'release', python: '3.12', gdal: '3.7.2', conda: false}
-          - {os: windows-latest,  r: 'release', python: '3.12', gdal: '3.7.3', conda: false}
-          - {os: windows-latest,  r: 'release', python: '3.12', gdal: '3.7.3', conda: true}
+          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.7.3', conda: false}
+          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.7.3', conda: true}
           - {os: ubuntu-latest,   r: 'devel', python: '3.12', gdal: '3.4.3', conda: false}
           - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.4.3', conda: false}
           - {os: ubuntu-20.04,    r: '4.0', python: '3.10', gdal: '3.3.2', conda: false}
@@ -56,7 +56,7 @@ jobs:
           activate-environment: r-ssurgoportal
 
       - name: Install rgeowheels (windows, virtualenv)
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && !matrix.config.conda
         run: |
           Rscript -e "install.packages('remotes')"
           Rscript -e "remotes::install_github('brownag/rgeowheels')"
