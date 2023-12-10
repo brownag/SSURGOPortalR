@@ -26,6 +26,7 @@ jobs:
           - {os: ubuntu-20.04,    r: '4.0', python: '3.10', gdal: '3.3.2'}
 
     env:
+      R_SSURGOPORTAL_PYTHON_VERSION: ${{ matrix.config.python }}
       R_SSURGOPORTAL_GDAL_VERSION: ${{ matrix.config.gdal }}
       R_SSIRG: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
