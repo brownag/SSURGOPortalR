@@ -9,11 +9,13 @@ create_ssurgo_venv(
   envname = "r-ssurgoportal",
   python_version = SSURGOPORTAL_PYTHON_VERSION(),
   gdal_version = SSURGOPORTAL_GDAL_VERSION(),
+  conda = FALSE,
   ...
 )
 
 ssurgo_portal_python(
   envname = getOption("SSURGOPortal.virtualenv_name", default = "r-ssurgoportal"),
+  conda = FALSE,
   ...
 )
 }
@@ -24,7 +26,9 @@ ssurgo_portal_python(
 
 \item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{""} for no specific version.}
 
-\item{...}{Additional arguments not (currently) used.}
+\item{conda}{logical. Look for Conda environment instead of virtual environment? Default: \code{FALSE}}
+
+\item{...}{Additional arguments used only when \code{conda=TRUE}}
 }
 \value{
 \emph{character}. Path to virtual environment Python binary (invisible).

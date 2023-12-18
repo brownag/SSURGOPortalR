@@ -227,9 +227,9 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
-#' @importFrom reticulate virtualenv_exists virtualenv_python conda_python use_python
+#' @importFrom reticulate virtualenv_exists virtualenv_python condaenv_exists conda_python use_python
 #' @importFrom utils tail
-.find_python <- function(envname = "r-ssurgoportal") {
+.find_python <- function(envname = "r-ssurgoportal", conda = FALSE) {
 
   # system python path
   py_path <- Sys.which("python")
@@ -238,18 +238,33 @@ ssurgo_portal <- function(request = NULL,
     py_path <- Sys.which("python3")
   }
 
+  .ssurgo_portal_debug("system python is", shQuote(normalizePath(py_path, winslash = "/"), type = "sh"))
+
   n <- getOption("SSURGOPortal.virtualenv_name", default = envname)
   o <- getOption("SSURGOPortal.python_path", default = py_path)
 
   use_reticulate <- .has_reticulate()
 
-  if (nchar(n) == 0 || !use_reticulate || !file.exists(o)) {
+  # expanded for debugging
+  if (nchar(n) == 0) {
+    .ssurgo_portal_debug("SSURGOPortal.virtualenv_name is empty")
+    o <- py_path
+  }
+  if (!use_reticulate) {
+    .ssurgo_portal_debug("reticulate is not available")
+    o <- py_path
+  }
+  if (!file.exists(o)) {
+    .ssurgo_portal_debug("path does not exist: ", shQuote(normalizePath(o, winslash = "/"), type = "sh"))
     o <- py_path
   }
 
-  if (use_reticulate && reticulate::virtualenv_exists(n)) {
-    vpy_path <- utils::tail(reticulate::virtualenv_python(envname = n), 1)
-    if (!file.exists(vpy_path)) {
+  if (use_reticulate) {
+    vpy_path <- reticulate::virtualenv_python(envname = n)
+    cpy_path <- reticulate::condaenv_exists(envname = n)
+
+    # TODO: detect if user is using conda?
+    if (conda && file.exists(cpy_path)) {
       co_path <- utils::tail(reticulate::conda_python(envname = n), 1)
       if (file.exists(co_path)) {
         o <- co_path
@@ -259,11 +274,13 @@ ssurgo_portal <- function(request = NULL,
     } else {
       # make sure reticulate uses the venv python if it exists
       # TODO: silence error when already initialized? or make it look nicer?
-      vpy <- try(reticulate::use_python(vpy_path), silent = FALSE)
+      vpy <- try(reticulate::use_python(vpy_path), silent = TRUE)
       if (!inherits(vpy, 'try-error'))
         o <- vpy_path
     }
   }
+
+  .ssurgo_portal_debug("using python", shQuote(normalizePath(o, winslash = "/"), type = "sh"))
 
   options(SSURGOPortal.python_path = o)
   o

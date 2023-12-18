@@ -1,3 +1,7 @@
+.has_ssurgo_portal_dependencies <- function() {
+  all(nchar(sapply(c("bottle", "jsonschema", "requests", "GDAL"), .get_python_package_version)) > 0)
+}
+
 #' Create Virtual Environment with SSURGO Portal Dependencies
 #'
 #' Uses 'reticulate' to create a virtual environment with the SSURGO Portal
@@ -7,13 +11,15 @@
 #' @param envname _character_. Python virtual environment name. Default: `"r-ssurgoportal"`
 #' @param python_version _character_. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"
 #' @param gdal_version _character_. Semantic version number of 'GDAL' package to install. Default: `""` for no specific version.
-#' @param ... Additional arguments not (currently) used.
+#' @param conda _logical_ or _character_. Create Conda environment instead of virtual environment? Default: `FALSE`. `TRUE` is converted to `"auto"` which searches for a suitable Conda installation. Alternately, the path to the conda binary may be specified as a _character_ value.
+#' @param ... Additional arguments used only when `conda=TRUE`
 #'
 #' @return _character_. Path to virtual environment Python binary (invisible).
 #' @export
 create_ssurgo_venv <- function(envname = "r-ssurgoportal",
                                python_version = SSURGOPORTAL_PYTHON_VERSION(),
                                gdal_version = SSURGOPORTAL_GDAL_VERSION(),
+                               conda = FALSE,
                                ...) {
   if (!.has_reticulate()) {
     stop("please install the 'reticulate' package to manage virtual environments", call. = FALSE)
@@ -30,32 +36,63 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
 
   if (nchar(envname) > 0) {
 
-    if (!reticulate::py_available(initialize = FALSE)) {
-      ipyv <- strsplit(python_version, ".", fixed = TRUE)[[1]]
-      ipvv <- ifelse(length(ipyv) == 2, paste0(python_version, ":latest"), python_version)
-      reticulate::install_python(version = ipvv)
-    }
+    if (!missing(conda) && (is.logical(conda) && conda) || is.character(conda)) {
+      if (is.logical(conda) && conda) {
+        conda <- "auto"
+      }
+      if (reticulate::condaenv_exists(envname = envname, conda = conda)) {
+        reticulate::use_condaenv(condaenv = envname, conda = conda)
+      } else {
+        reticulate::conda_create(
+          envname = envname,
+          packages = pkg,
+          forge = TRUE,
+          conda = conda,
+          python_version = python_version
+        )
+      }
+    } else if (!reticulate::virtualenv_exists(envname = envname)) {
 
-    if (!reticulate::virtualenv_exists(envname = envname)) {
-
-      res1 <- try(reticulate::virtualenv_create(envname = envname),
-                  silent = TRUE)
-
-      if (!reticulate::py_available(initialize = TRUE)) {
-        message("failed to initialize virtualenv python")
+      ipy <- TRUE
+      if (!reticulate::py_available(initialize = FALSE)) {
+        ipyv <- strsplit(python_version, ".", fixed = TRUE)[[1]]
+        ipvv <- ifelse(length(ipyv) == 2, paste0(python_version, ":latest"), python_version)
+        ipy <- try(reticulate::install_python(version = ipvv), silent = TRUE)
       }
 
-      # TODO: install missing packages into existing environments
-      res2 <- try(reticulate::virtualenv_install(envname = envname, packages = pkg),
-                  silent = TRUE)
+      res1 <- NULL
+      res2 <- NULL
+      if (!inherits(ipy, 'try-error')) {
+        res1 <- try(reticulate::virtualenv_create(envname = envname), silent = TRUE)
 
-      if (Sys.info()['sysname'] == "Windows" && !inherits(res2, 'try-error')) {
+        if (!reticulate::py_available(initialize = TRUE)) {
+          message("failed to initialize virtualenv python")
+        }
+
+        if (!inherits(res1, 'try-error')) {
+          # TODO: install missing packages into existing environments
+          res2 <- try(reticulate::virtualenv_install(envname = envname, packages = pkg), silent = TRUE)
+        }
+      }
+
+      if (!inherits(ipy, 'try-error') &&
+          !inherits(res1, 'try-error') &&
+          !inherits(res2, 'try-error')) {
+        py_path <- reticulate::virtualenv_python(envname = envname)
+      } else {
+        py_path <- .find_python("")
+
+        if (!.has_ssurgo_portal_dependencies())
+          system(paste(shQuote(py_path), "-m pip install --user --upgrade", paste(pkg, collapse = " ")))
+      }
+
+      if (Sys.info()['sysname'] == "Windows" && .get_python_package_version('GDAL') != gdal_version) {
 
         if (!requireNamespace("rgeowheels")) {
           stop("package 'rgeowheels' is required to install GDAL on Windows, download it here: https://github.com/brownag/rgeowheels/")
         }
 
-        system(paste(shQuote(reticulate::virtualenv_python(envname = envname)),
+        system(paste(shQuote(py_path),
                      "-m pip install", rgeowheels::install_wheel(
                        "GDAL",
                        pyversion = python_version,
@@ -65,33 +102,23 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
                        download_only = TRUE
                      ), collapse = ' '))
       }
-
-      if (inherits(res1, 'try-error') || inherits(res2, 'try-error')) {
-        reticulate::py_install(pkg)
-      }
-
-      # TODO: somehow flag if user install has taken place
-      if (inherits(res1, 'try-error')) {
-        system(paste(.find_python(""), "-m pip install --user ", paste(pkg, collapse = " ")))
-      }
     }
   }
   ssurgo_portal_python(envname = envname)
 }
 
-install_ssurgo_portal_dependencies <- function() {
-
-}
-
 #' @export
 #' @rdname create_ssurgo_venv
+#' @param conda logical. Look for Conda environment instead of virtual environment? Default: `FALSE`
 ssurgo_portal_python <- function(envname = getOption("SSURGOPortal.virtualenv_name",
-                                                     default = "r-ssurgoportal"), ...) {
+                                                     default = "r-ssurgoportal"),
+                                 conda = FALSE,
+                                 ...) {
   r <- .has_reticulate()
   if (missing(envname) && !r) {
     envname <- ""
   }
-  p <- .find_python(envname = envname)
+  p <- .find_python(envname = envname, conda = conda)
   options(SSURGOPortal.virtualenv_name = envname)
   options(SSURGOPortal.python_path = p)
   getOption("SSURGOPortal.python_path")

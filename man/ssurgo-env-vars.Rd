@@ -15,5 +15,5 @@ character. Version number for Python or GDAL to be used when building Python env
 \description{
 \code{SSURGOPORTAL_PYTHON_VERSION()}: returns value of system environment
 variable \code{R_SSURGOPORTAL_PYTHON_VERSION} or option \code{SSURGOPortal.python_version}.
-If neither are set then returns \code{"3.10.2"}, the suggested Python version.
+If neither are set then returns \code{"3.10"}, the suggested Python version.
 }
