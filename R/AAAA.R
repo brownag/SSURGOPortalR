@@ -1,5 +1,5 @@
 .GLOBAL <- list()
-.GLOBAL$SSURGOPortal.debug <- TRUE
+.GLOBAL$SSURGOPortal.debug <- FALSE
 .GLOBAL$SSURGOPortal.debug_message_function <- packageStartupMessage
 utils::globalVariables(".GLOBAL", "SSURGOPortal")
 
@@ -42,7 +42,7 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
   s <- Sys.getenv("R_SSURGOPORTAL_GDAL_VERSION", unset = "")
   o <- getOption("SSURGOPortal.gdal_version", default = "")
   p <- .get_python_package_version('GDAL')
-  if (s == p || o == p || nchar(p) > 0) {
+  if (nchar(p) > 0 && (s == p || o == p))  {
     attr(p, "installed") <- TRUE
   } else {
     if (nchar(s) > 0)
@@ -67,7 +67,13 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
 }
 
 .get_python_package_version <- function(x) {
-  try(reticulate::py_eval(paste0("version('", x, "')")), silent = TRUE)
+  res <- try(reticulate::py_eval(paste0("version('", x, "')")), silent = TRUE)
+  if (inherits(res, 'try-error')) {
+    res2 <- ""
+    attr(res2, 'error') <- res
+    return(res2)
+  }
+  res
 }
 
 .get_system_gdal_version <- function() {
@@ -95,8 +101,9 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
 
   # only perform automatic setup if reticulate is available, user is attaching lib interactively
   # and they have not turned off the default behavior to try and create/use a venv
-
+  ven <- ""
   use_conda <- as.logical(getOption("SSURGOPortal.use_condaenv", default = cev))
+  use_venv <- as.logical(getOption("SSURGOPortal.use_virtualenv", default = sev))
 
   # NB: must have reticulate to tinker with virtual environments
   if (.has_reticulate()) {
@@ -104,14 +111,15 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
     try(reticulate::py_run_string("from importlib.metadata import version"), silent = TRUE)
 
     # NB: never sets up virtual or conda environment unless package is being loaded interactively
-    if (interactive() && (use_conda || as.logical(getOption("SSURGOPortal.use_virtualenv", default = sev)))) {
+    if (interactive() && (use_conda || use_venv)) {
 
       # default behavior is to use a virtual environment "r-ssurgoportal"
       ven <- getOption("SSURGOPortal.virtualenv_name", default = "r-ssurgoportal")
       .ssurgo_portal_debug("SSURGOPortal.virtualenv_name:", ven)
 
+      # TODO: if either environment exists (however complete) this will not be triggered
       if (!reticulate::virtualenv_exists(ven) && !reticulate::condaenv_exists(ven))
-        create_ssurgo_venv(ven)
+        create_ssurgo_venv(ven, conda = use_conda)
 
       # reticulate::use_python(ssurgo_portal_python(envname = ven, conda = use_conda))
     }
@@ -120,7 +128,7 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
   .winpath <- function(x) if (Sys.info()["sysname"] == "Windows") normalizePath(x, "/") else x
 
   # TODO: indicate that these paths exist (and are executable?)
-  pyp <- suppressWarnings(.winpath(ssurgo_portal_python()))
+  pyp <- suppressWarnings(.winpath(ssurgo_portal_python(ssurgo_portal_python(envname = ven, conda = use_conda))))
   ssp <- suppressWarnings(.winpath(file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")))
 
   packageStartupMessage("SSURGOPortal R Interface v",

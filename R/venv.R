@@ -82,8 +82,18 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
       } else {
         py_path <- .find_python("")
 
-        if (!.has_ssurgo_portal_dependencies())
-          system(paste(shQuote(py_path), "-m pip install --user --upgrade", paste(pkg, collapse = " ")))
+        if (!.has_ssurgo_portal_dependencies()) {
+
+          # try installing as needed into virtual or condaenv
+          FUN <- reticulate::virtualenv_install
+          if (conda) FUN <- reticulate::conda_install
+
+          res2 <- try(FUN(envname = envname, packages = pkg), silent = TRUE)
+
+          # fall back to user install if all else fails (danger zone (tm))
+          if (inherits(res2, 'try-error'))
+            system(paste(shQuote(py_path), "-m pip install --user --upgrade", paste(pkg, collapse = " ")))
+        }
       }
 
       if (Sys.info()['sysname'] == "Windows" && .get_python_package_version('GDAL') != gdal_version) {

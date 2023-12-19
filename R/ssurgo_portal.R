@@ -227,6 +227,12 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
+.python_can_run <- function(x) {
+  (is.character(x) && length(x) == 1 &&
+     file.exists(x) &&
+       !inherits(system2(x, "--version", stdout = TRUE), 'try-error'))
+}
+
 #' @importFrom reticulate virtualenv_exists virtualenv_python condaenv_exists conda_python use_python
 #' @importFrom utils tail
 .find_python <- function(envname = "r-ssurgoportal", conda = FALSE) {
@@ -259,28 +265,23 @@ ssurgo_portal <- function(request = NULL,
     o <- py_path
   }
 
+  # make sure reticulate uses the venv python if it exists
+  # _and_ we can execute it in current location (not guaranteed!!)
   if (use_reticulate) {
-    vpy_path <- reticulate::virtualenv_python(envname = n)
-    cpy_path <- reticulate::condaenv_exists(envname = n)
-
-    # TODO: detect if user is using conda?
-    if (conda && file.exists(cpy_path)) {
-      co_path <- utils::tail(reticulate::conda_python(envname = n), 1)
-      if (file.exists(co_path)) {
-        o <- co_path
-      } else {
-        o <- py_path
+    # TODO: detect if user is using conda? easy opt in?
+    if (conda && reticulate::condaenv_exists(envname = n)) {
+      cpy_path <- utils::tail(reticulate::conda_python(envname = n), 1)
+      if (.python_can_run(cpy_path)) {
+        o <- cpy_path
+        attr(o, 'exists') <- TRUE
+        attr(o, 'executable') <- TRUE
       }
     } else {
-      # make sure reticulate uses the venv python if it exists
-      # TODO: silence error when already initialized? or make it look nicer?
-      # vpy <- try(reticulate::use_python(vpy_path), silent = TRUE)
-      # if (!inherits(vpy, 'try-error'))
-      #   o <- vpy_path
-      if (file.exists(vpy_path)) {
-        if (!inherits(system2(vpy_path, "--version"), 'try-error')) {
-          o <- vpy_path
-        }
+      vpy_path <- utils::tail(reticulate::virtualenv_python(envname = n), 1)
+      if (.python_can_run(vpy_path)) {
+        o <- vpy_path
+        attr(o, 'exists') <- TRUE
+        attr(o, 'executable') <- TRUE
       }
     }
   }
@@ -301,7 +302,7 @@ ssurgo_portal <- function(request = NULL,
     ignore.stderr = FALSE,
     input = c("p", "\r")
   ), silent = FALSE)
-  # use message so it can be suppressMessages()'d
-  message(paste0(res, collapse = "\n"))
+  # # use message so it can be suppressMessages()'d
+  # message(paste0(res, collapse = "\n"))
   res
 }
