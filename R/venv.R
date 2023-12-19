@@ -60,7 +60,7 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
       spyv <- strsplit(.get_system_python_version(), ".")[[1]]
 
       # if using venv, if system version does not match, or no python available, install python
-      if (install_python && (!conda && any(ipyv[1:2] != spyv[1:2])) || !reticulate::py_available(initialize = FALSE)) {
+      if (install_python && !conda || !reticulate::py_available(initialize = FALSE)) {
         ipvv <- ifelse(length(ipyv) == 2, paste0(python_version, ":latest"), python_version)
         # this fails if user lacks execute permissions in standard pyenv location
         ipy <- try(suppressWarnings(reticulate::install_python(version = ipvv)), silent = TRUE)
