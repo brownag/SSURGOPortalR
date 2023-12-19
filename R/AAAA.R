@@ -113,7 +113,7 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
       if (!reticulate::virtualenv_exists(ven) && !reticulate::condaenv_exists(ven))
         create_ssurgo_venv(ven)
 
-      reticulate::use_python(ssurgo_portal_python(envname = ven, conda = use_conda))
+      # reticulate::use_python(ssurgo_portal_python(envname = ven, conda = use_conda))
     }
   }
 
