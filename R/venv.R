@@ -12,6 +12,7 @@
 #' @param python_version _character_. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"
 #' @param gdal_version _character_. Semantic version number of 'GDAL' package to install. Default: `""` for no specific version.
 #' @param conda _logical_ or _character_. Create Conda environment instead of virtual environment? Default: `FALSE`. `TRUE` is converted to `"auto"` which searches for a suitable Conda installation. Alternately, the path to the conda binary may be specified as a _character_ value.
+#' @param install_python _logical_. Install Python from official source using `pyenv`? Default: `TRUE`. Used for virtual environment installs when the system python does not match requested version, or usable Python is not otherwise detectable.
 #' @param ... Additional arguments used only when `conda=TRUE`
 #'
 #' @return _character_. Path to virtual environment Python binary (invisible).
@@ -20,6 +21,7 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
                                python_version = SSURGOPORTAL_PYTHON_VERSION(),
                                gdal_version = SSURGOPORTAL_GDAL_VERSION(),
                                conda = FALSE,
+                               install_python = TRUE,
                                ...) {
   if (!.has_reticulate()) {
     stop("please install the 'reticulate' package to manage virtual environments", call. = FALSE)
@@ -53,16 +55,20 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
       }
     } else if (!reticulate::virtualenv_exists(envname = envname)) {
 
-      ipy <- TRUE
-      if (!reticulate::py_available(initialize = FALSE)) {
-        ipyv <- strsplit(python_version, ".", fixed = TRUE)[[1]]
+      ipy <- NULL
+      ipyv <- strsplit(python_version, ".", fixed = TRUE)[[1]]
+      spyv <- strsplit(.get_system_python_version(), ".")[[1]]
+
+      # if using venv, if system version does not match, or no python available, install python
+      if (install_python && (!conda && any(ipyv[1:2] != spyv[1:2])) || !reticulate::py_available(initialize = FALSE)) {
         ipvv <- ifelse(length(ipyv) == 2, paste0(python_version, ":latest"), python_version)
-        ipy <- try(reticulate::install_python(version = ipvv), silent = TRUE)
+        # this fails if user lacks execute permissions in standard pyenv location
+        ipy <- try(suppressWarnings(reticulate::install_python(version = ipvv)), silent = TRUE)
       }
 
       res1 <- NULL
       res2 <- NULL
-      if (!inherits(ipy, 'try-error')) {
+      if (!conda && !is.null(ipy) && !inherits(ipy, 'try-error')) {
         res1 <- try(reticulate::virtualenv_create(envname = envname), silent = TRUE)
 
         if (!reticulate::py_available(initialize = TRUE)) {

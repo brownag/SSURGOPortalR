@@ -10,6 +10,7 @@ create_ssurgo_venv(
   python_version = SSURGOPORTAL_PYTHON_VERSION(),
   gdal_version = SSURGOPORTAL_GDAL_VERSION(),
   conda = FALSE,
+  install_python = TRUE,
   ...
 )
 
@@ -27,6 +28,8 @@ ssurgo_portal_python(
 \item{gdal_version}{\emph{character}. Semantic version number of 'GDAL' package to install. Default: \code{""} for no specific version.}
 
 \item{conda}{logical. Look for Conda environment instead of virtual environment? Default: \code{FALSE}}
+
+\item{install_python}{\emph{logical}. Install Python from official source using \code{pyenv}? Default: \code{TRUE}. Used for virtual environment installs when the system python does not match requested version, or usable Python is not otherwise detectable.}
 
 \item{...}{Additional arguments used only when \code{conda=TRUE}}
 }
