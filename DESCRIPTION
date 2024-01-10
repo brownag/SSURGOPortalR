@@ -6,13 +6,18 @@ Author: Soil Survey Staff
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: Provides methods for downloading and interacting with the 'SSURGO Portal' Python tools. 
 Depends: R (>= 4.0)
+SystemRequirements: Python (>= 3.9.0)
 Imports: 
   utils, 
+  reticulate,
   jsonlite
 Suggests:
   soilDB,
   terra,
-  testthat (>= 3.0.0)
+  testthat (>= 3.0.0),
+  rgeowheels
+Remotes:
+  brownag/rgeowheels
 License: CC0
 Encoding: UTF-8
 LazyData: true

@@ -22,6 +22,10 @@ test_that("ssurgo_portal() works (template only, no SSURGO data)", {
                  is.list(x$nodes))
   }
 
+  # in theory this should be able to set up an adequate environment
+  if (!.has_ssurgo_portal_dependencies())
+    try(create_ssurgo_venv())
+
   # trigger an initialization outside of test expectation (if needed)
   try(ssurgo_portal("getstatus"))
 
@@ -30,7 +34,7 @@ test_that("ssurgo_portal() works (template only, no SSURGO data)", {
   .expect_response(ssurgo_portal("getstatus", schema = TRUE))
 
   # sample subdirectory
-  dir.create("foo")
+  dir.create("foo", showWarnings = FALSE)
 
   # inspect folder tree
   .expect_nodes(ssurgo_portal(

@@ -63,7 +63,7 @@
   # }
 
   #### REBUILD .PYZ file ----
-  system(paste0(.find_python(), " -m zipapp ", shQuote(scd)), intern = TRUE)
+  system(paste0(ssurgo_portal_python(), " -m zipapp ", shQuote(scd)), intern = TRUE)
   file.copy(
     file.path(wd, "SSURGO-Portal.pyz"),
     file.path(wd, "SSURGOPortal.pyz"),

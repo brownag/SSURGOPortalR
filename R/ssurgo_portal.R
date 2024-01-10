@@ -94,8 +94,8 @@ ssurgo_portal <- function(request = NULL,
   if (missing(request) || is.null(request)) {
 
     cmd <- paste0(shQuote(c(
-      .find_python(),
-      file.path(ssurgo_portal_dir("data"), "SSURGOPortal.pyz")
+      ssurgo_portal_python(),
+      pyz_path
     )), collapse = ' ')
 
     if (command_only) {
@@ -134,7 +134,7 @@ ssurgo_portal <- function(request = NULL,
     req$subfolders <- as.list(req$subfolders)
   }
 
-  py_path <- .find_python()
+  py_path <- ssurgo_portal_python()
 
   # additional arguments (...) are passed in JSON w/ request type
   if (schema) {
@@ -227,21 +227,82 @@ ssurgo_portal <- function(request = NULL,
   }
 }
 
-.find_python <- function() {
-  # find python
+.python_can_run <- function(x) {
+  (is.character(x) && length(x) == 1 &&
+     file.exists(x) &&
+       !inherits(system2(x, "--version", stdout = TRUE), 'try-error'))
+}
+
+#' @importFrom reticulate virtualenv_exists virtualenv_python condaenv_exists conda_python use_python
+#' @importFrom utils tail
+.find_python <- function(envname = "r-ssurgoportal", conda = FALSE) {
+
+  # system python path
   py_path <- Sys.which("python")
+
   if (nchar(py_path) == 0) {
     py_path <- Sys.which("python3")
   }
-  py_path
+
+  .ssurgo_portal_debug("system python is", shQuote(normalizePath(py_path, winslash = "/"), type = "sh"))
+
+  n <- getOption("SSURGOPortal.virtualenv_name", default = envname)
+  o <- getOption("SSURGOPortal.python_path", default = py_path)
+
+  use_reticulate <- .has_reticulate()
+
+  # expanded for debugging
+  if (nchar(n) == 0) {
+    .ssurgo_portal_debug("SSURGOPortal.virtualenv_name is empty")
+    o <- py_path
+  }
+  if (!use_reticulate) {
+    .ssurgo_portal_debug("reticulate is not available")
+    o <- py_path
+  }
+  if (!file.exists(o)) {
+    .ssurgo_portal_debug("path does not exist: ", shQuote(normalizePath(o, winslash = "/"), type = "sh"))
+    o <- py_path
+  }
+
+  # make sure reticulate uses the venv python if it exists
+  # _and_ we can execute it in current location (not guaranteed!!)
+  if (use_reticulate) {
+    # TODO: detect if user is using conda? easy opt in?
+    if (conda && reticulate::condaenv_exists(envname = n)) {
+      cpy_path <- utils::tail(reticulate::conda_python(envname = n), 1)
+      if (.python_can_run(cpy_path)) {
+        o <- cpy_path
+        attr(o, 'exists') <- TRUE
+        attr(o, 'executable') <- TRUE
+      }
+    } else {
+      vpy_path <- utils::tail(reticulate::virtualenv_python(envname = n), 1)
+      if (.python_can_run(vpy_path)) {
+        o <- vpy_path
+        attr(o, 'exists') <- TRUE
+        attr(o, 'executable') <- TRUE
+      }
+    }
+  }
+
+  .ssurgo_portal_debug("using python", shQuote(normalizePath(o, winslash = "/"), type = "sh"))
+
+  options(SSURGOPortal.python_path = o)
+  o
 }
 
 
 .syscall <- function(cmd) {
-  system(cmd,
-         wait = FALSE,
-         intern = TRUE,
-         ignore.stdout = FALSE,
-         ignore.stderr = FALSE,
-         input = c("p", "\r"))
+  res <- try(system(
+    cmd,
+    wait = FALSE,
+    intern = TRUE,
+    ignore.stdout = FALSE,
+    ignore.stderr = FALSE,
+    input = c("p", "\r")
+  ), silent = FALSE)
+  # # use message so it can be suppressMessages()'d
+  # message(paste0(res, collapse = "\n"))
+  res
 }

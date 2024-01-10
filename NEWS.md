@@ -1,3 +1,7 @@
+# SSURGOPortal 0.0.4
+
+* Added `create_ssurgo_venv()` and added support for using custom virtual environment python executables to run the SSURGOPortal .pyz. Uses {reticulate} to manage installation of Python, creation of virtual environments, installation of dependencies, etc.
+
 # SSURGOPortal 0.0.3
 
 * `install_ssurgo_portal()`: Updated to Web Soil Survey as source URL for beta version of SSURGO Portal .PYZ file  <https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip>

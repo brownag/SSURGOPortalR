@@ -6,7 +6,10 @@
 #' @param overwrite Overwrite existing .PYZ file? Default: `FALSE`
 #' @param timeout Default: `3000` seconds. Temporarily overrides `options()` for `timeout`.
 #' @param src Default: `"https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip"`
-#' @param ... Additional arguments to `download.file()`
+#' @param envname Virtual environment to create for installation. Default: `"r-ssurgoportal"`. Use `""` for no virtual environment modifications.
+#' @param ... Additional arguments to `create_ssurgo_venv()` when `venv=TRUE`.
+#' @param python_version _character_. Semantic version number of 'Python' to install if not available. Default: `"3.10.2"`
+#' @param gdal_version _character_. Semantic version number of 'GDAL' package to install. Default: `""`
 #'
 #' @return Path to downloaded file, or `try-error` on error.
 #' @export
@@ -16,9 +19,27 @@
 #'  install_ssurgo_portal()
 #' }
 #' @importFrom utils download.file
-install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3000,
-                                  src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
-                                  ...) {
+install_ssurgo_portal <- function(
+    verbose = TRUE,
+    overwrite = FALSE,
+    timeout = 3000,
+    src = "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/SsurgoPortal/SSURGO_Portal.zip",
+    envname = "r-ssurgoportal",
+    python_version = SSURGOPORTAL_PYTHON_VERSION(),
+    gdal_version = SSURGOPORTAL_GDAL_VERSION(),
+    ...
+) {
+
+  if (nchar(envname) > 0) {
+    o2 <- try(create_ssurgo_venv(envname = envname,
+                                 python_version = python_version,
+                                 gdal_version = gdal_version))
+
+    if (inherits(o2, 'try-error'))
+      stop('Failed to create virtual environment `\"', envname,
+           '\"` or install required packages to base environment', call. = FALSE)
+
+  }
 
   # update 2023/10/19: use WSS link
   # TODO: autoupdate link, use release, build .PYZ from a GH source?
@@ -26,10 +47,10 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
 
   optorig <- getOption("timeout")
   on.exit(options(timeout = optorig))
-  options(timeout = 3000)
+  options(timeout = timeout)
   dstd <- ssurgo_portal_dir("data")
   dst <- file.path(dstd, "SSURGOPortal.pyz.zip")
-  dst2 <- file.path(dstd, "SSURGOPortal.pyz")
+  dst2 <- normalizePath(file.path(dstd, "SSURGOPortal.pyz"), winslash = "/", mustWork = FALSE)
 
   if (!dir.exists(dstd)) {
     dir.create(dstd, recursive = TRUE)
@@ -39,7 +60,7 @@ install_ssurgo_portal <- function(verbose = TRUE, overwrite = FALSE, timeout = 3
     message("File ", dst2, " already exists. Set overwrite=TRUE to re-download")
     res <- TRUE
   } else {
-    res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb", ...))
+    res <- try(download.file(urx, dst, quiet = !verbose, mode = "wb"))
     res <- try(suppressWarnings(unzip(dst, exdir = dstd)))
     res <- try(file.copy(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal.*pyz$")[1], dst2, overwrite = TRUE))
     res <- try(file.remove(list.files(dstd, recursive = TRUE, full.names = TRUE, pattern = "SSURGO_Portal")[1]))
