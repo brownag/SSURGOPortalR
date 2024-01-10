@@ -16,6 +16,9 @@
     <loc>http://humus.rocks/SSURGOPortalR/news/index.html</loc>
   </url>
   <url>
+    <loc>http://humus.rocks/SSURGOPortalR/reference/create_ssurgo_venv.html</loc>
+  </url>
+  <url>
     <loc>http://humus.rocks/SSURGOPortalR/reference/download_ssurgo.html</loc>
   </url>
   <url>
@@ -23,6 +26,9 @@
   </url>
   <url>
     <loc>http://humus.rocks/SSURGOPortalR/reference/install_ssurgo_portal.html</loc>
+  </url>
+  <url>
+    <loc>http://humus.rocks/SSURGOPortalR/reference/ssurgo-env-vars.html</loc>
   </url>
   <url>
     <loc>http://humus.rocks/SSURGOPortalR/reference/ssurgo_portal.html</loc>
