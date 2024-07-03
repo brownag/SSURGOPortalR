@@ -1,3 +1,7 @@
+# SSURGOPortal 0.0.5
+
+* Add error handling for cases when a virtual environment cannot be used. Also, add instructions to README to indicate how to disable the default virtual environment behavior on USDA machines that lack administrative priveliges/ability to execute arbitrary python binaries.
+
 # SSURGOPortal 0.0.4
 
 * Added `create_ssurgo_venv()` and added support for using custom virtual environment python executables to run the SSURGOPortal .pyz. Uses {reticulate} to manage installation of Python, creation of virtual environments, installation of dependencies, etc.

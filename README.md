@@ -23,16 +23,52 @@ remotes::install_github("brownag/SSURGOPortalR")
 
 ## Example
 
-This is example shows how to install the .PYZ file to a standard
-location:
+This example shows how to install the .PYZ file and run from a standard
+location.
+
+If you are using a machine that cannot utilize custom virtual or Conda
+environments you must use the system interpreter. By default, to conform
+with best practices and to minimize unintended disturbances to the
+system python installation, SSURGOPortal will install and run the tool
+from a custom virtual environment. The default name of this environment
+is `"r-ssurgoportal"`. To avoid the default virtual environment, *before
+loading the package*, set the environment variable
+`"R_SSURGOPORTAL_USE_VIRTUALENV"` to `FALSE`. You may opt to put this
+setting into a user or project-level .Renviron file, or in your user
+environment variables.
+
+``` r
+Sys.setenv(R_SSURGOPORTAL_USE_VIRTUALENV = FALSE)
+```
+
+You may also need to set your default Python interpreter if running the
+tool through RStudio. See *Tools \>\> Global Options… \>\> Python*. If
+using the system interpreter, you likely want to *uncheck* the box
+“Automatically use project-local Python environments”.
+
+First load the R package:
 
 ``` r
 library(SSURGOPortal)
+#> SSURGOPortal R Interface v0.0.4
+#>  Python: C:/Program Files/Python312/python.exe
+#>  SSURGO Portal: C:/Users/Andrew.G.Brown/AppData/Roaming/R/data/R/SSURGOPortal/SSURGOPortal.pyz
 ```
+
+You should see a message that indicates the Python binary that will be
+used for sending commands to SSURGOPortal.
+
+If you have not installed an instance of SSURGOPortal, you will see that
+the PYZ file is “not found”. To install, use the R function
+`install_ssurgo_portal()`
 
 ``` r
 install_ssurgo_portal()
 ```
+
+This function has several additional/optional arguments that allow you
+to customize the target virtual environment name, Python version and
+GDAL version to use with the installation.
 
 The above installation routine places the SSURGO Portal file in a
 platform-specific folder: `ssurgo_portal_dir("data")`
@@ -143,7 +179,8 @@ ssurgo_portal(
 There are built in routines and binaries for running the tool on Windows
 with Python 3.9 or 3.10. If using a different version of Python you will
 need to be sure the required modules are installed prior to running
-`ssurgo_portal()`.
+`ssurgo_portal()`. The tools have all been tested and verified to work
+with Python 3.12.
 
 ## Python Dependencies
 
@@ -160,7 +197,7 @@ and intended to provide feedback for future development. If these
 patches are not included the initialization routine will be triggered on
 non-Windows platforms.
 
-This routine only installs the bundled Windows wheel (.whl) files; it
+This routineonly installs the bundled Windows wheel (.whl) files; it
 should be expected to fail on all other platforms and Python versions
 other than 3.9 and 3.10.
 

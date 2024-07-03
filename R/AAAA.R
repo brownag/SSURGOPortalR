@@ -108,7 +108,14 @@ SSURGOPORTAL_GDAL_VERSION <-  function() {
   # NB: must have reticulate to tinker with virtual environments
   if (.has_reticulate()) {
     # NB: requires Python >= 3.8
-    try(reticulate::py_run_string("from importlib.metadata import version"), silent = TRUE)
+    # test <- try(reticulate::py_run_string("from importlib.metadata import version"), silent = TRUE)
+    #
+    # if (inherits(test, 'try-error')) {
+    #   # the above fails if a python installation default detected by reticulate is not executable
+    #   # reticulate::use_python(.find_python(""))
+    #   use_venv <- FALSE
+    #   use_conda <- FALSE
+    # }
 
     # NB: never sets up virtual or conda environment unless package is being loaded interactively
     if (interactive() && (use_conda || use_venv)) {
