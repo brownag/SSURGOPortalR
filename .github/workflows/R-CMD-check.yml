@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,    r: 'release', python: '3.11', gdal: '3.7.2', conda: false}
+          - {os: macos-latest,    r: 'release', python: '3.12', gdal: '3.7.2', conda: false}
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.7.3', conda: false}
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.7.3', conda: true}
           - {os: ubuntu-latest,   r: 'devel', python: '3.11', gdal: '3.4.3', conda: false}
