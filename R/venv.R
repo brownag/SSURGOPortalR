@@ -1,5 +1,6 @@
 .has_ssurgo_portal_dependencies <- function() {
-  all(nchar(sapply(c("bottle", "jsonschema", "requests", "GDAL"), .get_python_package_version)) > 0)
+  all(nchar(sapply(c("bottle", "jsonschema", "requests", "dbf", "numpy", "psutil", "pandas", "GDAL"),
+                   .get_python_package_version)) > 0)
 }
 
 #' Create Virtual Environment with SSURGO Portal Dependencies
@@ -27,7 +28,7 @@ create_ssurgo_venv <- function(envname = "r-ssurgoportal",
     stop("please install the 'reticulate' package to manage virtual environments", call. = FALSE)
   }
 
-  pkg <- c("bottle", "jsonschema", "requests",
+  pkg <- c("bottle", "jsonschema", "requests", "dbf", "numpy", "psutil", "pandas",
            ifelse(Sys.info()['sysname'] == "Windows", "",
                   ifelse(
                     !is.null(gdal_version) && nchar(gdal_version) > 0,

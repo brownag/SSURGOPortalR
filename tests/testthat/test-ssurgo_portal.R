@@ -86,7 +86,7 @@ test_that("ssurgo_portal() works (template only, no SSURGO data)", {
     loadinspatialorder = FALSE,
     loadspatialdatawithinsubprocess = TRUE,
     dissolvemupolygon = TRUE
-  ), "sacatlog.*does not exist")
+  ), "does not exist")
 
   .expect_status_isTRUE(ssurgo_portal("getdatabaseinventory", database = dbp))
 
