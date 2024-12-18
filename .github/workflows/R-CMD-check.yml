@@ -19,12 +19,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,    r: 'release', python: '3.12', gdal: '3.7.2', conda: false}
-          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.7.3', conda: false}
-          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.7.3', conda: true}
-          - {os: ubuntu-latest,   r: 'devel', python: '3.11', gdal: '3.4.3', conda: false}
-          - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.4.3', conda: false}
-          - {os: ubuntu-20.04,    r: '4.0', python: '3.10', gdal: '3.3.2', conda: false}
+          - {os: macos-latest,    r: 'release', python: '3.11', gdal: '3.10.0', conda: false}
+          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.9.2', conda: false}
+          - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.9.2', conda: true}
+          - {os: ubuntu-latest,   r: 'devel', python: '3.11', gdal: '3.6.4', conda: false}
+          - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.6.4', conda: false}
+          - {os: ubuntu-20.04,    r: '4.0', python: '3.11', gdal: '3.3.2', conda: false}
 
     env:
       R_SSURGOPORTAL_PYTHON_VERSION: ${{ matrix.config.python }}
