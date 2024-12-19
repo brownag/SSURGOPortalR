@@ -132,8 +132,9 @@ ssurgo_portal_python <- function(envname = getOption("SSURGOPortal.virtualenv_na
                                  conda = FALSE,
                                  ...) {
   r <- .has_reticulate()
-  if (missing(envname) && !r) {
+  if ((missing(envname) && !r) || isFALSE(as.logical(Sys.getenv("R_SSURGOPORTAL_USE_VIRTUALENV", unset = "FALSE")))) {
     envname <- ""
+    options(SSURGOPortal.virtualenv_name = envname)
   }
   p <- .find_python(envname = envname, conda = conda)
   options(SSURGOPortal.python_path = p)
