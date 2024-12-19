@@ -1,3 +1,8 @@
+# SSURGOPortal 0.0.6 
+* Added  "dbf", "numpy", "psutil", "pandas" to SSURGO Portal python dependencies list (#7)
+
+* Add `ssurgo_portal()` request types: "getrecordlistbytable", "generaterasters", "logjavascripterror", "getsdvattributesbyfolder", "getsdvratingoptions", "generateaggregation", "sortratingtable", "exportratingresults" (#8)
+
 # SSURGOPortal 0.0.5
 
 * Add error handling for cases when a virtual environment cannot be used. Also, add instructions to README to indicate how to disable the default virtual environment behavior on USDA machines that lack administrative priveliges/ability to execute arbitrary python binaries.
