@@ -22,8 +22,15 @@
 #' |deleteareasymbols       |Delete the specified areasymbols from the database.                                                                                                                    |
 #' |pretestimportcandidates |Perform a 'pre-test' on subfolders under a root folder.                                                                                                                |
 #' |importcandidates        |Import SSURGO data from subfolders under a root folder. The import terminates if any folder fails.                                                                     |
-#' |importspatialdata       |For internal use only. Import SSURGO spatial data from shapefiles under a specified path. Note that this activity is isolated to support its use in a child process. |
-#'
+#' |importspatialdata       |For internal use only. Import SSURGO spatial data from shapefiles under a specified path. Note that this activity is isolated to support its use in a child process.   |
+#' |getrecordlistbytable    |Retrieve table rows for a specified table                                                                                                                              |
+#' |generaterasters         |Generate rasters of the mupolygon dataset in the user specified SSURGO Template Database.                                                                              |
+#' |logjavascripterror      |Write an error to the log file                                                                                                |
+#' |getsdvattributesbyfolder|Get Soil Data Viewer attributes                                                                                                                                        |
+#' |getsdvratingoptions     |Get Soil Data Viewer rating options                                                                                                                                    |
+#' |generateaggregation     |Generate an aggregation                                                                                                                                                |
+#' |sortratingtable         |Sort a rating table by a specified column name                                                                                                                         |
+#' |exportratingresults     |Export rating results                                                                                                                                                  |
 #' @return A `list` object corresponding to the JSON response. `NULL` (invisibly) on error along with any other standard output from the tool printed to the console.
 #' @export
 #'
@@ -116,7 +123,15 @@ ssurgo_portal <- function(request = NULL,
                                   "deleteareasymbols",
                                   "pretestimportcandidates",
                                   "importcandidates",
-                                  "importspatialdata"))
+                                  "importspatialdata",
+                                  "getrecordlistbytable",
+                                  "generaterasters",
+                                  "logjavascripterror",
+                                  "getsdvattributesbyfolder",
+                                  "getsdvratingoptions",
+                                  "generateaggregation",
+                                  "sortratingtable",
+                                  "exportratingresults"))
 
   req <- list(request = request, ...)
 

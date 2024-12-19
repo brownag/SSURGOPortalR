@@ -44,6 +44,14 @@ Generate commands for the 'SSURGO Portal' Data Loader command-line interface, an
    pretestimportcandidates \tab Perform a 'pre-test' on subfolders under a root folder. \cr
    importcandidates \tab Import SSURGO data from subfolders under a root folder. The import terminates if any folder fails. \cr
    importspatialdata \tab For internal use only. Import SSURGO spatial data from shapefiles under a specified path. Note that this activity is isolated to support its use in a child process. \cr
+   getrecordlistbytable \tab Retrieve table rows for a specified table \cr
+   generaterasters \tab Generate rasters of the mupolygon dataset in the user specified SSURGO Template Database. \cr
+   logjavascripterror \tab Write an error to the log file \cr
+   getsdvattributesbyfolder \tab Get Soil Data Viewer attributes \cr
+   getsdvratingoptions \tab Get Soil Data Viewer rating options \cr
+   generateaggregation \tab Generate an aggregation \cr
+   sortratingtable \tab Sort a rating table by a specified column name \cr
+   exportratingresults \tab Export rating results \cr
 }
 }
 \examples{
