@@ -1,4 +1,4 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+ # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   workflow_dispatch:
@@ -22,9 +22,9 @@ jobs:
           - {os: macos-latest,    r: 'release', python: '3.11', gdal: '3.10.0', conda: false}
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.9.2', conda: false}
           - {os: windows-latest,  r: 'release', python: '3.11', gdal: '3.9.2', conda: true}
-          - {os: ubuntu-latest,   r: 'devel', python: '3.11', gdal: '3.6.4', conda: false}
-          - {os: ubuntu-latest,   r: 'release', python: '3.11', gdal: '3.6.4', conda: false}
-          - {os: ubuntu-20.04,    r: '4.0', python: '3.11', gdal: '3.3.2', conda: false}
+          - {os: ubuntu-24.04,   r: 'devel', python: '3.13', gdal: '3.8.4', conda: false}
+          - {os: ubuntu-24.04,   r: 'release', python: '3.11', gdal: '3.8.4', conda: false}
+          - {os: ubuntu-22.04,    r: '4.0', python: '3.11', gdal: '3.4.1', conda: false}
 
     env:
       R_SSURGOPORTAL_PYTHON_VERSION: ${{ matrix.config.python }}
